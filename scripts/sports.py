@@ -16,6 +16,8 @@ SPORTS = {
     "mbball": {"sport_id": 23, "name": "Men's Basketball", "term": "winter"},
     "wbball": {"sport_id": 15, "name": "Women's Basketball", "term": "winter"},
     "wrestling": {"sport_id": 7, "name": "Wrestling", "term": "winter"},
+    "msquash": {"sport_id": 19, "name": "Men's Squash", "term": "winter"},
+    "wsquash": {"sport_id": 10, "name": "Women's Squash", "term": "winter"},
     "baseball": {"sport_id": 31, "name": "Baseball", "term": "spring"},
     "softball": {"sport_id": 17, "name": "Softball", "term": "spring"},
     "mlax": {"sport_id": 21, "name": "Men's Lacrosse", "term": "spring"},
