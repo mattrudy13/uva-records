@@ -47,11 +47,17 @@ def main():
         for row in csv.DictReader(f):
             official[row["sport"]][row["season"]] = row
 
+    overrides_path = ROOT / "data" / "overrides.json"
+    overrides = json.loads(overrides_path.read_text()) if overrides_path.exists() else {}
+
     report, bad = {}, 0
     for slug in SPORTS:
         if args.sport and slug not in args.sport:
             continue
         mine = computed_records(slug)
+        # Seasons where the site is missing games we can't recover. The official record is
+        # shown instead, and these seasons are left out of streaks.
+        incomplete = set(overrides.get(slug, {}).get("incomplete", []))
         rows = []
         for season in sorted(set(mine) | set(official[slug])):
             o, m = official[slug].get(season), mine.get(season)
@@ -61,6 +67,8 @@ def main():
                 got = {k: (m or {}).get(k, 0) for k in ("w", "l", "t")}
                 row["official"] = want
                 row["status"] = "match" if want == got else "mismatch"
+                if row["status"] == "mismatch" and season in incomplete:
+                    row["status"] = "incomplete"
                 # Conference splits are informational: books and the site sometimes
                 # disagree on which games counted (e.g. ACC Challenge, divisional play).
                 if o["conf_w"] != "":
@@ -76,10 +84,17 @@ def main():
                           f"  official {want['w']}-{want['l']}-{want['t']}")
         report[slug] = rows
 
-    (ROOT / "data" / "validation.json").write_text(json.dumps(report, indent=1))
-    total = sum(1 for rows in report.values() for r in rows if r["status"] != "unchecked")
-    print(f"{total - bad}/{total} checked seasons match; "
-          f"{sum(1 for rows in report.values() for r in rows if r['status'] == 'unchecked')} unchecked")
+    out = ROOT / "data" / "validation.json"
+    if args.sport and out.exists():  # a partial run updates only the sports it checked
+        report = {**json.loads(out.read_text()), **report}
+    out.write_text(json.dumps(report, indent=1))
+    counts = defaultdict(int)
+    for rows in report.values():
+        for r in rows:
+            counts[r["status"]] += 1
+    checked = counts["match"] + counts["mismatch"] + counts["incomplete"]
+    print(f"{counts['match']}/{checked} checked seasons match; {counts['incomplete']} known incomplete; "
+          f"{counts['mismatch']} mismatched; {counts['unchecked']} unchecked")
     sys.exit(1 if bad else 0)
 
 

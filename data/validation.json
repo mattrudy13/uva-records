@@ -487,8 +487,8 @@
    "season": "2000",
    "games": {
     "w": 17,
-    "l": 7,
-    "t": 0,
+    "l": 6,
+    "t": 1,
     "conf_w": 5,
     "conf_l": 1,
     "conf_t": 0
@@ -498,7 +498,7 @@
     "l": 6,
     "t": 1
    },
-   "status": "mismatch",
+   "status": "match",
    "conf_match": true
   },
   {
@@ -522,10 +522,10 @@
   {
    "season": "2002",
    "games": {
-    "w": 14,
-    "l": 6,
-    "t": 1,
-    "conf_w": 2,
+    "w": 15,
+    "l": 7,
+    "t": 0,
+    "conf_w": 3,
     "conf_l": 3,
     "conf_t": 0
    },
@@ -534,8 +534,8 @@
     "l": 7,
     "t": 0
    },
-   "status": "mismatch",
-   "conf_match": false
+   "status": "match",
+   "conf_match": true
   },
   {
    "season": "2003",
@@ -612,7 +612,7 @@
   {
    "season": "2007",
    "games": {
-    "w": 13,
+    "w": 12,
     "l": 8,
     "t": 2,
     "conf_w": 1,
@@ -624,7 +624,7 @@
     "l": 8,
     "t": 2
    },
-   "status": "mismatch",
+   "status": "match",
    "conf_match": false
   },
   {
@@ -648,9 +648,9 @@
   {
    "season": "2009",
    "games": {
-    "w": 18,
+    "w": 19,
     "l": 3,
-    "t": 4,
+    "t": 3,
     "conf_w": 3,
     "conf_l": 2,
     "conf_t": 1
@@ -660,7 +660,7 @@
     "l": 3,
     "t": 3
    },
-   "status": "mismatch",
+   "status": "match",
    "conf_match": false
   },
   {
@@ -738,9 +738,9 @@
   {
    "season": "2014",
    "games": {
-    "w": 13,
+    "w": 14,
     "l": 6,
-    "t": 4,
+    "t": 3,
     "conf_w": 3,
     "conf_l": 3,
     "conf_t": 2
@@ -750,7 +750,7 @@
     "l": 6,
     "t": 3
    },
-   "status": "mismatch",
+   "status": "match",
    "conf_match": true
   },
   {
@@ -829,8 +829,8 @@
    "season": "2019",
    "games": {
     "w": 21,
-    "l": 1,
-    "t": 2,
+    "l": 2,
+    "t": 1,
     "conf_w": 6,
     "conf_l": 1,
     "conf_t": 1
@@ -840,7 +840,7 @@
     "l": 2,
     "t": 1
    },
-   "status": "mismatch",
+   "status": "match",
    "conf_match": true
   },
   {
@@ -981,15 +981,15 @@
     "l": 8,
     "t": 1
    },
-   "status": "mismatch",
+   "status": "incomplete",
    "conf_match": false
   },
   {
    "season": "2001",
    "games": {
     "w": 8,
-    "l": 4,
-    "t": 0,
+    "l": 2,
+    "t": 2,
     "conf_w": 2,
     "conf_l": 1,
     "conf_t": 0
@@ -999,7 +999,7 @@
     "l": 4,
     "t": 2
    },
-   "status": "mismatch",
+   "status": "incomplete",
    "conf_match": false
   },
   {
@@ -1096,7 +1096,7 @@
    "season": "2007",
    "games": {
     "w": 13,
-    "l": 6,
+    "l": 4,
     "t": 6,
     "conf_w": 5,
     "conf_l": 2,
@@ -1107,15 +1107,15 @@
     "l": 4,
     "t": 6
    },
-   "status": "mismatch",
+   "status": "match",
    "conf_match": true
   },
   {
    "season": "2008",
    "games": {
-    "w": 16,
+    "w": 15,
     "l": 5,
-    "t": 4,
+    "t": 3,
     "conf_w": 6,
     "conf_l": 3,
     "conf_t": 1
@@ -1125,15 +1125,15 @@
     "l": 5,
     "t": 3
    },
-   "status": "mismatch",
+   "status": "match",
    "conf_match": true
   },
   {
    "season": "2009",
    "games": {
-    "w": 11,
+    "w": 10,
     "l": 6,
-    "t": 7,
+    "t": 6,
     "conf_w": 4,
     "conf_l": 4,
     "conf_t": 2
@@ -1143,15 +1143,15 @@
     "l": 6,
     "t": 6
    },
-   "status": "mismatch",
+   "status": "match",
    "conf_match": true
   },
   {
    "season": "2010",
    "games": {
-    "w": 16,
+    "w": 15,
     "l": 5,
-    "t": 3,
+    "t": 2,
     "conf_w": 7,
     "conf_l": 2,
     "conf_t": 1
@@ -1161,14 +1161,14 @@
     "l": 5,
     "t": 2
    },
-   "status": "mismatch",
+   "status": "match",
    "conf_match": true
   },
   {
    "season": "2011",
    "games": {
-    "w": 18,
-    "l": 6,
+    "w": 17,
+    "l": 5,
     "t": 2,
     "conf_w": 7,
     "conf_l": 2,
@@ -1179,15 +1179,15 @@
     "l": 5,
     "t": 2
    },
-   "status": "mismatch",
+   "status": "match",
    "conf_match": true
   },
   {
    "season": "2012",
    "games": {
     "w": 18,
-    "l": 6,
-    "t": 2,
+    "l": 5,
+    "t": 1,
     "conf_w": 6,
     "conf_l": 3,
     "conf_t": 1
@@ -1197,13 +1197,13 @@
     "l": 5,
     "t": 1
    },
-   "status": "mismatch",
+   "status": "match",
    "conf_match": true
   },
   {
    "season": "2013",
    "games": {
-    "w": 25,
+    "w": 24,
     "l": 1,
     "t": 1,
     "conf_w": 12,
@@ -1215,7 +1215,7 @@
     "l": 1,
     "t": 1
    },
-   "status": "mismatch",
+   "status": "match",
    "conf_match": false
   },
   {
@@ -1449,7 +1449,7 @@
     "l": 8,
     "t": 0
    },
-   "status": "mismatch",
+   "status": "incomplete",
    "conf_match": false
   },
   {
@@ -1467,7 +1467,7 @@
     "l": 8,
     "t": 0
    },
-   "status": "mismatch",
+   "status": "incomplete",
    "conf_match": false
   },
   {
@@ -1545,7 +1545,7 @@
   {
    "season": "2006",
    "games": {
-    "w": 15,
+    "w": 14,
     "l": 8,
     "t": 0,
     "conf_w": 1,
@@ -1557,7 +1557,7 @@
     "l": 8,
     "t": 0
    },
-   "status": "mismatch",
+   "status": "match",
    "conf_match": true
   },
   {
@@ -1689,8 +1689,8 @@
   {
    "season": "2014",
    "games": {
-    "w": 11,
-    "l": 9,
+    "w": 12,
+    "l": 8,
     "t": 0,
     "conf_w": 4,
     "conf_l": 2,
@@ -1701,7 +1701,7 @@
     "l": 8,
     "t": 0
    },
-   "status": "mismatch",
+   "status": "match",
    "conf_match": true
   },
   {
@@ -1927,7 +1927,7 @@
     "l": 15,
     "t": 0
    },
-   "status": "mismatch",
+   "status": "incomplete",
    "conf_match": false
   },
   {
@@ -2053,7 +2053,7 @@
     "l": 13,
     "t": 0
    },
-   "status": "mismatch",
+   "status": "incomplete",
    "conf_match": false
   },
   {
@@ -2107,7 +2107,7 @@
     "l": 16,
     "t": 0
    },
-   "status": "mismatch",
+   "status": "incomplete",
    "conf_match": true
   },
   {
@@ -2384,7 +2384,7 @@
    "season": "2000-01",
    "games": {
     "w": 20,
-    "l": 10,
+    "l": 9,
     "t": 0,
     "conf_w": 9,
     "conf_l": 7,
@@ -2395,7 +2395,7 @@
     "l": 9,
     "t": 0
    },
-   "status": "mismatch",
+   "status": "match",
    "conf_match": true
   },
   {
@@ -2509,7 +2509,7 @@
   {
    "season": "2007-08",
    "games": {
-    "w": 18,
+    "w": 17,
     "l": 16,
     "t": 0,
     "conf_w": 5,
@@ -2521,13 +2521,13 @@
     "l": 16,
     "t": 0
    },
-   "status": "mismatch",
+   "status": "match",
    "conf_match": true
   },
   {
    "season": "2008-09",
    "games": {
-    "w": 11,
+    "w": 10,
     "l": 18,
     "t": 0,
     "conf_w": 4,
@@ -2539,7 +2539,7 @@
     "l": 18,
     "t": 0
    },
-   "status": "mismatch",
+   "status": "match",
    "conf_match": true
   },
   {
@@ -2563,7 +2563,7 @@
   {
    "season": "2010-11",
    "games": {
-    "w": 17,
+    "w": 16,
     "l": 15,
     "t": 0,
     "conf_w": 6,
@@ -2575,7 +2575,7 @@
     "l": 15,
     "t": 0
    },
-   "status": "mismatch",
+   "status": "match",
    "conf_match": false
   },
   {
@@ -2853,7 +2853,7 @@
   {
    "season": "2000-01",
    "games": {
-    "w": 17,
+    "w": 18,
     "l": 14,
     "t": 0,
     "conf_w": 8,
@@ -2865,14 +2865,14 @@
     "l": 14,
     "t": 0
    },
-   "status": "mismatch",
+   "status": "match",
    "conf_match": true
   },
   {
    "season": "2001-02",
    "games": {
-    "w": 16,
-    "l": 14,
+    "w": 17,
+    "l": 13,
     "t": 0,
     "conf_w": 9,
     "conf_l": 7,
@@ -2883,7 +2883,7 @@
     "l": 13,
     "t": 0
    },
-   "status": "mismatch",
+   "status": "match",
    "conf_match": true
   },
   {
@@ -2961,7 +2961,7 @@
   {
    "season": "2006-07",
    "games": {
-    "w": 20,
+    "w": 19,
     "l": 15,
     "t": 0,
     "conf_w": 5,
@@ -2973,7 +2973,7 @@
     "l": 15,
     "t": 0
    },
-   "status": "mismatch",
+   "status": "match",
    "conf_match": true
   },
   {
@@ -2991,7 +2991,7 @@
     "l": 10,
     "t": 0
    },
-   "status": "mismatch",
+   "status": "incomplete",
    "conf_match": false
   },
   {
@@ -3051,10 +3051,10 @@
   {
    "season": "2011-12",
    "games": {
-    "w": 24,
+    "w": 25,
     "l": 11,
     "t": 0,
-    "conf_w": 8,
+    "conf_w": 9,
     "conf_l": 7,
     "conf_t": 0
    },
@@ -3063,8 +3063,8 @@
     "l": 11,
     "t": 0
    },
-   "status": "mismatch",
-   "conf_match": false
+   "status": "match",
+   "conf_match": true
   },
   {
    "season": "2012-13",
@@ -3123,7 +3123,7 @@
   {
    "season": "2015-16",
    "games": {
-    "w": 19,
+    "w": 18,
     "l": 16,
     "t": 0,
     "conf_w": 6,
@@ -3135,7 +3135,7 @@
     "l": 16,
     "t": 0
    },
-   "status": "mismatch",
+   "status": "match",
    "conf_match": true
   },
   {
@@ -3325,7 +3325,7 @@
     "l": 8,
     "t": 0
    },
-   "status": "mismatch",
+   "status": "incomplete",
    "conf_match": false
   },
   {
@@ -3343,7 +3343,7 @@
     "l": 10,
     "t": 0
    },
-   "status": "mismatch",
+   "status": "incomplete",
    "conf_match": false
   },
   {
@@ -3361,7 +3361,7 @@
     "l": 5,
     "t": 0
    },
-   "status": "mismatch",
+   "status": "incomplete",
    "conf_match": false
   },
   {
@@ -3415,7 +3415,7 @@
     "l": 5,
     "t": 0
    },
-   "status": "mismatch",
+   "status": "incomplete",
    "conf_match": false
   },
   {
@@ -3433,7 +3433,7 @@
     "l": 10,
     "t": 0
    },
-   "status": "mismatch",
+   "status": "incomplete",
    "conf_match": false
   },
   {
@@ -3469,7 +3469,7 @@
     "l": 11,
     "t": 0
    },
-   "status": "mismatch",
+   "status": "incomplete",
    "conf_match": false
   },
   {
@@ -3749,11 +3749,236 @@
    "status": "unchecked"
   }
  ],
+ "msquash": [
+  {
+   "season": "2017-18",
+   "games": {
+    "w": 15,
+    "l": 8,
+    "t": 0,
+    "conf_w": 0,
+    "conf_l": 0,
+    "conf_t": 0
+   },
+   "official": null,
+   "status": "unchecked"
+  },
+  {
+   "season": "2018-19",
+   "games": {
+    "w": 16,
+    "l": 7,
+    "t": 0,
+    "conf_w": 0,
+    "conf_l": 0,
+    "conf_t": 0
+   },
+   "official": null,
+   "status": "unchecked"
+  },
+  {
+   "season": "2019-20",
+   "games": {
+    "w": 19,
+    "l": 5,
+    "t": 0,
+    "conf_w": 0,
+    "conf_l": 0,
+    "conf_t": 0
+   },
+   "official": null,
+   "status": "unchecked"
+  },
+  {
+   "season": "2020-21",
+   "games": {
+    "w": 2,
+    "l": 0,
+    "t": 0,
+    "conf_w": 0,
+    "conf_l": 0,
+    "conf_t": 0
+   },
+   "official": null,
+   "status": "unchecked"
+  },
+  {
+   "season": "2021-22",
+   "games": {
+    "w": 12,
+    "l": 8,
+    "t": 0,
+    "conf_w": 0,
+    "conf_l": 0,
+    "conf_t": 0
+   },
+   "official": null,
+   "status": "unchecked"
+  },
+  {
+   "season": "2022-23",
+   "games": {
+    "w": 13,
+    "l": 7,
+    "t": 0,
+    "conf_w": 0,
+    "conf_l": 0,
+    "conf_t": 0
+   },
+   "official": null,
+   "status": "unchecked"
+  },
+  {
+   "season": "2023-24",
+   "games": {
+    "w": 10,
+    "l": 10,
+    "t": 0,
+    "conf_w": 0,
+    "conf_l": 0,
+    "conf_t": 0
+   },
+   "official": null,
+   "status": "unchecked"
+  },
+  {
+   "season": "2024-25",
+   "games": {
+    "w": 11,
+    "l": 6,
+    "t": 0,
+    "conf_w": 0,
+    "conf_l": 0,
+    "conf_t": 0
+   },
+   "official": null,
+   "status": "unchecked"
+  },
+  {
+   "season": "2025-26",
+   "games": {
+    "w": 13,
+    "l": 6,
+    "t": 0,
+    "conf_w": 0,
+    "conf_l": 0,
+    "conf_t": 0
+   },
+   "official": null,
+   "status": "unchecked"
+  }
+ ],
+ "wsquash": [
+  {
+   "season": "2017-18",
+   "games": {
+    "w": 14,
+    "l": 9,
+    "t": 0,
+    "conf_w": 0,
+    "conf_l": 0,
+    "conf_t": 0
+   },
+   "official": null,
+   "status": "unchecked"
+  },
+  {
+   "season": "2018-19",
+   "games": {
+    "w": 18,
+    "l": 7,
+    "t": 0,
+    "conf_w": 0,
+    "conf_l": 0,
+    "conf_t": 0
+   },
+   "official": null,
+   "status": "unchecked"
+  },
+  {
+   "season": "2019-20",
+   "games": {
+    "w": 17,
+    "l": 6,
+    "t": 0,
+    "conf_w": 0,
+    "conf_l": 0,
+    "conf_t": 0
+   },
+   "official": null,
+   "status": "unchecked"
+  },
+  {
+   "season": "2021-22",
+   "games": {
+    "w": 14,
+    "l": 6,
+    "t": 0,
+    "conf_w": 0,
+    "conf_l": 0,
+    "conf_t": 0
+   },
+   "official": null,
+   "status": "unchecked"
+  },
+  {
+   "season": "2022-23",
+   "games": {
+    "w": 13,
+    "l": 7,
+    "t": 0,
+    "conf_w": 0,
+    "conf_l": 0,
+    "conf_t": 0
+   },
+   "official": null,
+   "status": "unchecked"
+  },
+  {
+   "season": "2023-24",
+   "games": {
+    "w": 13,
+    "l": 6,
+    "t": 0,
+    "conf_w": 0,
+    "conf_l": 0,
+    "conf_t": 0
+   },
+   "official": null,
+   "status": "unchecked"
+  },
+  {
+   "season": "2024-25",
+   "games": {
+    "w": 12,
+    "l": 6,
+    "t": 0,
+    "conf_w": 0,
+    "conf_l": 0,
+    "conf_t": 0
+   },
+   "official": null,
+   "status": "unchecked"
+  },
+  {
+   "season": "2025-26",
+   "games": {
+    "w": 13,
+    "l": 7,
+    "t": 0,
+    "conf_w": 0,
+    "conf_l": 0,
+    "conf_t": 0
+   },
+   "official": null,
+   "status": "unchecked"
+  }
+ ],
  "baseball": [
   {
    "season": "2001",
    "games": {
-    "w": 20,
+    "w": 25,
     "l": 31,
     "t": 0,
     "conf_w": 9,
@@ -3765,7 +3990,7 @@
     "l": 31,
     "t": 0
    },
-   "status": "mismatch",
+   "status": "match",
    "conf_match": false
   },
   {
@@ -3879,7 +4104,7 @@
   {
    "season": "2008",
    "games": {
-    "w": 40,
+    "w": 39,
     "l": 23,
     "t": 0,
     "conf_w": 15,
@@ -3891,14 +4116,14 @@
     "l": 23,
     "t": 0
    },
-   "status": "mismatch",
+   "status": "match",
    "conf_match": true
   },
   {
    "season": "2009",
    "games": {
-    "w": 48,
-    "l": 16,
+    "w": 49,
+    "l": 15,
     "t": 1,
     "conf_w": 16,
     "conf_l": 11,
@@ -3909,7 +4134,7 @@
     "l": 15,
     "t": 1
    },
-   "status": "mismatch",
+   "status": "match",
    "conf_match": true
   },
   {
@@ -4225,7 +4450,7 @@
     "l": 17,
     "t": 0
    },
-   "status": "mismatch",
+   "status": "incomplete",
    "conf_match": false
   },
   {
@@ -4249,8 +4474,8 @@
   {
    "season": "2003",
    "games": {
-    "w": 38,
-    "l": 25,
+    "w": 37,
+    "l": 26,
     "t": 0,
     "conf_w": 3,
     "conf_l": 5,
@@ -4261,14 +4486,14 @@
     "l": 26,
     "t": 0
    },
-   "status": "mismatch",
+   "status": "match",
    "conf_match": true
   },
   {
    "season": "2004",
    "games": {
-    "w": 39,
-    "l": 25,
+    "w": 38,
+    "l": 26,
     "t": 0,
     "conf_w": 8,
     "conf_l": 7,
@@ -4279,7 +4504,7 @@
     "l": 26,
     "t": 0
    },
-   "status": "mismatch",
+   "status": "match",
    "conf_match": false
   },
   {
@@ -4695,7 +4920,7 @@
     "l": 7,
     "t": 0
    },
-   "status": "mismatch",
+   "status": "incomplete",
    "conf_match": true
   },
   {
@@ -4791,8 +5016,8 @@
   {
    "season": "2007",
    "games": {
-    "w": 11,
-    "l": 5,
+    "w": 12,
+    "l": 4,
     "t": 0,
     "conf_w": 2,
     "conf_l": 1,
@@ -4803,7 +5028,7 @@
     "l": 4,
     "t": 0
    },
-   "status": "mismatch",
+   "status": "match",
    "conf_match": true
   },
   {
@@ -5517,13 +5742,13 @@
     "l": 12,
     "t": 0
    },
-   "status": "mismatch",
+   "status": "incomplete",
    "conf_match": true
   },
   {
    "season": "2003",
    "games": {
-    "w": 18,
+    "w": 20,
     "l": 8,
     "t": 0,
     "conf_w": 4,
@@ -5535,7 +5760,7 @@
     "l": 8,
     "t": 0
    },
-   "status": "mismatch",
+   "status": "match",
    "conf_match": false
   },
   {
@@ -5595,7 +5820,7 @@
   {
    "season": "2007",
    "games": {
-    "w": 28,
+    "w": 30,
     "l": 4,
     "t": 0,
     "conf_w": 9,
@@ -5607,7 +5832,7 @@
     "l": 4,
     "t": 0
    },
-   "status": "mismatch",
+   "status": "match",
    "conf_match": false
   },
   {
@@ -5649,8 +5874,8 @@
   {
    "season": "2010",
    "games": {
-    "w": 40,
-    "l": 1,
+    "w": 39,
+    "l": 2,
     "t": 0,
     "conf_w": 11,
     "conf_l": 0,
@@ -5661,7 +5886,7 @@
     "l": 2,
     "t": 0
    },
-   "status": "mismatch",
+   "status": "match",
    "conf_match": true
   },
   {
@@ -5952,7 +6177,7 @@
   {
    "season": "2001",
    "games": {
-    "w": 11,
+    "w": 15,
     "l": 11,
     "t": 0,
     "conf_w": 3,
@@ -5964,7 +6189,7 @@
     "l": 11,
     "t": 0
    },
-   "status": "mismatch",
+   "status": "match",
    "conf_match": false
   },
   {
@@ -5982,7 +6207,7 @@
     "l": 10,
     "t": 0
    },
-   "status": "mismatch",
+   "status": "incomplete",
    "conf_match": false
   },
   {

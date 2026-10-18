@@ -1,0 +1,417 @@
+{
+  "wsoc": {
+    "incomplete": [
+      "2000",
+      "2001"
+    ],
+    "games": {
+      "11549": {
+        "kind": "exhibition",
+        "why": "preseason; not in 2025-26 record book"
+      },
+      "11521": {
+        "kind": "exhibition",
+        "why": "preseason; not in 2025-26 record book"
+      },
+      "10690": {
+        "kind": "exhibition",
+        "why": "preseason; not in 2025-26 record book"
+      },
+      "10675": {
+        "kind": "exhibition",
+        "why": "preseason; not in 2025-26 record book"
+      },
+      "10403": {
+        "kind": "exhibition",
+        "why": "preseason; not in 2025-26 record book"
+      },
+      "10397": {
+        "kind": "exhibition",
+        "why": "preseason; not in 2025-26 record book"
+      },
+      "10217": {
+        "kind": "exhibition",
+        "why": "preseason; not in 2025-26 record book"
+      },
+      "10214": {
+        "kind": "exhibition",
+        "why": "preseason; not in 2025-26 record book"
+      },
+      "9220": {
+        "kind": "exhibition",
+        "why": "preseason; not in 2025-26 record book"
+      },
+      "9205": {
+        "kind": "exhibition",
+        "why": "preseason; not in 2025-26 record book"
+      },
+      "8305": {
+        "kind": "exhibition",
+        "why": "preseason; not in 2025-26 record book"
+      },
+      "8292": {
+        "kind": "exhibition",
+        "why": "preseason; not in 2025-26 record book"
+      },
+      "7946": {
+        "kind": "exhibition",
+        "why": "preseason; not in 2025-26 record book"
+      },
+      "15355": {
+        "result": "T",
+        "why": "record book: tie (decided on PKs)"
+      },
+      "14928": {
+        "result": "T",
+        "why": "record book: tie (decided on PKs)"
+      }
+    }
+  },
+  "msoc": {
+    "games": {
+      "15349": {
+        "result": "T",
+        "why": "record book: T 2-2 (2ot)"
+      },
+      "13415": {
+        "result": "T",
+        "why": "record book: T 0-0 (ot), ACC tournament, decided on PKs"
+      },
+      "13385": {
+        "result": "T",
+        "why": "record book: T 1-1 (ot), ACC tournament, decided on PKs"
+      },
+      "11532": {
+        "kind": "exhibition",
+        "why": "preseason; not in 2026 record book"
+      }
+    },
+    "add": [
+      {
+        "season": "2002",
+        "date": "2002-11-01",
+        "opponent": "Maryland",
+        "venue": "home",
+        "result": "W",
+        "uva": 1,
+        "opp": 0,
+        "conf": true,
+        "why": "missing from site; 2026 record book: Nov. 1 Maryland H W, 1-0"
+      }
+    ]
+  },
+  "fhockey": {
+    "incomplete": [
+      "2000",
+      "2001"
+    ],
+    "games": {
+      "7578": {
+        "result": "W",
+        "uva": 4,
+        "opp": 3,
+        "why": "all-time results: Rutgers 4-3 W (OT); matches the book's 12-8 season record"
+      }
+    }
+  },
+  "mbball": {
+    "games": {
+      "15078": {
+        "kind": "exhibition",
+        "why": "exhibition vs. London Leopards (touring club); official record 20-9"
+      },
+      "11054": {
+        "kind": "exhibition",
+        "why": "exhibition vs. Carson-Newman (D-II); official record 17-16"
+      },
+      "10156": {
+        "kind": "exhibition",
+        "why": "exhibition vs. Shepherd (D-II); official record 10-18"
+      },
+      "9742": {
+        "kind": "exhibition",
+        "why": "exhibition vs. Roanoke (D-III); official record 16-15"
+      }
+    }
+  },
+  "wbball": {
+    "incomplete": [
+      "2007-08"
+    ],
+    "games": {
+      "12239": {
+        "kind": "exhibition",
+        "why": "exhibition vs. Team Concept; not in 2025-26 fact book"
+      },
+      "14743": {
+        "result": "W",
+        "uva": 72,
+        "opp": 71,
+        "why": "fact book: UC-Santa Barbara W 72-71"
+      },
+      "5916": {
+        "result": "L",
+        "uva": 48,
+        "opp": 60,
+        "why": "fact book: vs. Rutgers L 60-48"
+      },
+      "5902": {
+        "result": "L",
+        "uva": 62,
+        "opp": 67,
+        "why": "fact book: vs. Tulane L 67-62"
+      },
+      "5861": {
+        "result": "W",
+        "uva": 85,
+        "opp": 65,
+        "why": "fact book: Charleston Southern W 85-65"
+      }
+    },
+    "add": [
+      {
+        "season": "2000-01",
+        "date": "2000-12-20",
+        "opponent": "Liberty",
+        "venue": "home",
+        "result": "W",
+        "uva": 73,
+        "opp": 46,
+        "why": "missing from site; fact book: D 20 Liberty W 73-46"
+      },
+      {
+        "season": "2011-12",
+        "date": "2012-01-29",
+        "opponent": "Florida State",
+        "venue": "home",
+        "result": "W",
+        "uva": 62,
+        "opp": 52,
+        "conf": true,
+        "why": "missing from site; fact book: J 29 Florida State W 62-52"
+      }
+    ]
+  },
+  "baseball": {
+    "games": {
+      "11386": {
+        "kind": "duplicate",
+        "why": "second copy of 11375 (Stony Brook W 3-0, 2008-03-18); record book (through 2024) lists two games that day"
+      },
+      "10494": {
+        "result": "W",
+        "uva": 6,
+        "opp": 3,
+        "why": "record book (through 2024): May 24 vs. Florida State W 6-3"
+      }
+    },
+    "add": [
+      {
+        "season": "2001",
+        "date": "2001-02-17",
+        "opponent": "Navy",
+        "venue": "home",
+        "result": "W",
+        "uva": 10,
+        "opp": 3,
+        "conf": false,
+        "why": "missing from site; record book (through 2024): Feb. 17 Navy W 10-3"
+      },
+      {
+        "season": "2001",
+        "date": "2001-02-24",
+        "opponent": "Penn State",
+        "venue": "home",
+        "result": "W",
+        "uva": 6,
+        "opp": 5,
+        "conf": false,
+        "why": "missing from site; record book (through 2024): Feb. 24 Penn State W 6-5 (9)"
+      },
+      {
+        "season": "2001",
+        "date": "2001-03-03",
+        "opponent": "Seton Hall",
+        "venue": "home",
+        "result": "W",
+        "uva": 2,
+        "opp": 1,
+        "conf": false,
+        "why": "missing from site; record book (through 2024): Mar. 3 Seton Hall W 2-1"
+      },
+      {
+        "season": "2001",
+        "date": "2001-03-27",
+        "opponent": "Richmond",
+        "venue": "home",
+        "result": "W",
+        "uva": 1,
+        "opp": 0,
+        "conf": false,
+        "why": "missing from site; record book (through 2024): Mar. 27 Richmond W 1-0"
+      },
+      {
+        "season": "2001",
+        "date": "2001-04-27",
+        "opponent": "Miami",
+        "venue": "away",
+        "result": "W",
+        "uva": 5,
+        "opp": 0,
+        "conf": false,
+        "why": "missing from site; record book (through 2024): Apr. 27 at Miami W 5-0"
+      }
+    ]
+  },
+  "softball": {
+    "incomplete": [
+      "2001"
+    ],
+    "games": {
+      "15086": {
+        "result": "L",
+        "uva": 1,
+        "opp": 6,
+        "why": "2026-27 record book: 3/15/03 Seton Hall L 1-6"
+      },
+      "14185": {
+        "result": "L",
+        "uva": 0,
+        "opp": 5,
+        "why": "2026-27 record book: 2/29/04 Mississippi State L 0-5"
+      }
+    }
+  },
+  "mlax": {
+    "incomplete": [
+      "2001"
+    ],
+    "games": {
+      "11808": {
+        "result": "W",
+        "uva": 11,
+        "opp": 10,
+        "why": "2026 record book: 4/27/07 vs. Maryland W 11-10"
+      }
+    }
+  },
+  "wvball": {
+    "incomplete": [
+      "2000",
+      "2007",
+      "2010"
+    ]
+  },
+  "wrestling": {
+    "incomplete": [
+      "2000-01",
+      "2001-02",
+      "2002-03",
+      "2005-06",
+      "2006-07",
+      "2008-09"
+    ]
+  },
+  "mten": {
+    "incomplete": [
+      "2002"
+    ],
+    "games": {
+      "10319": {
+        "result": "L",
+        "uva": 2,
+        "opp": 4,
+        "why": "2026 fact book: NCAA final vs. USC L 4-2"
+      }
+    },
+    "add": [
+      {
+        "season": "2003",
+        "date": "2003-03-15",
+        "opponent": "UMBC",
+        "venue": "home",
+        "result": "W",
+        "uva": 6,
+        "opp": 1,
+        "why": "missing from site; 2026 fact book: M15 UMBC W 6-1"
+      },
+      {
+        "season": "2003",
+        "date": "2003-04-02",
+        "opponent": "Howard",
+        "venue": "home",
+        "result": "W",
+        "uva": 7,
+        "opp": 0,
+        "why": "missing from site; 2026 fact book: A2 Howard W 7-0"
+      },
+      {
+        "season": "2007",
+        "date": "2007-02-28",
+        "opponent": "Maryland",
+        "venue": "home",
+        "result": "W",
+        "uva": 5,
+        "opp": 2,
+        "why": "missing from site; 2026 fact book: F28 Maryland W 5-2"
+      },
+      {
+        "season": "2007",
+        "date": "2007-03-15",
+        "opponent": "Boston College",
+        "venue": "away",
+        "result": "W",
+        "uva": 7,
+        "opp": 0,
+        "why": "missing from site; 2026 fact book: M15 at Boston College W 7-0"
+      }
+    ]
+  },
+  "wten": {
+    "incomplete": [
+      "2002"
+    ],
+    "add": [
+      {
+        "season": "2001",
+        "date": "2000-10-13",
+        "opponent": "Columbia",
+        "venue": "neutral",
+        "result": "W",
+        "uva": 6,
+        "opp": 1,
+        "why": "missing from site; 2026 fact book: O13 vs Columbia W 6-1 (fall dual)"
+      },
+      {
+        "season": "2001",
+        "date": "2000-10-13",
+        "opponent": "Temple",
+        "venue": "neutral",
+        "result": "W",
+        "uva": 5,
+        "opp": 2,
+        "why": "missing from site; 2026 fact book: O13 vs Temple W 5-2 (fall dual)"
+      },
+      {
+        "season": "2001",
+        "date": "2000-10-15",
+        "opponent": "Harvard",
+        "venue": "away",
+        "result": "W",
+        "uva": 6,
+        "opp": 1,
+        "why": "missing from site; 2026 fact book: O15 at Harvard W 6-1 (fall dual)"
+      },
+      {
+        "season": "2001",
+        "date": "2000-10-16",
+        "opponent": "Pennsylvania",
+        "venue": "away",
+        "result": "W",
+        "uva": 4,
+        "opp": 3,
+        "why": "missing from site; 2026 fact book: O16 at Pennsylvania W 4-3 (fall dual)"
+      }
+    ]
+  }
+}

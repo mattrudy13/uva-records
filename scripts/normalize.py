@@ -16,7 +16,9 @@ Usage: .venv/bin/python scripts/normalize.py
 
 import json
 import re
+from datetime import datetime
 from pathlib import Path
+from zoneinfo import ZoneInfo
 
 from sports import SPORTS, season_label
 
@@ -27,15 +29,23 @@ OVERRIDES = ROOT / "data" / "overrides.json"
 
 INTRASQUAD = re.compile(r"orange[\s/-]*(and|&|vs\.?)?[\s/-]*blue|blue[\s/-]*(and|&|vs\.?)?[\s/-]*orange|intrasquad|alumni|blue[\s/-]*white|scrimmage", re.I)
 # Older seasons mark exhibitions only in the opponent name, e.g. "Concordia (Exhibition)".
-EXHIBITION_NAME = re.compile(r"\bexhibition\b|\(exh?\.?\)|\(ex\.\)", re.I)
-# NCAA soccer records count games decided on penalty kicks as ties; the site often
-# records the shootout winner instead. Field hockey shootouts do count as W/L.
-PK_SPORTS = {"msoc", "wsoc"}
-PK_NOTE = re.compile(r"\bpk|shoot-?out", re.I)
+EXHIBITION_NAME = re.compile(r"\bexhibition\b|\(exh?\.?\)|\(ex\.\)|\(scrim", re.I)
+
+# Some tournament entries are another game's final, e.g. "Richmond 54, Lafayette 46".
+OTHER_GAME = re.compile(r"\D \d+, .+ \d+$")
 # Spring sports play fall-ball games that UVA files under the spring season; they never count.
 FALL_MONTHS = {"08", "09", "10", "11", "12"}
 DROPPED_STATUSES = {"cancelled", "canceled", "postponed"}
 RESULTS = {"win": "W", "loss": "L", "tie": "T"}
+EASTERN = ZoneInfo("America/New_York")
+
+
+def local_date(stamp):
+    """The API stores UTC, so a 7 PM Eastern game would otherwise land on the next day.
+    All-day events are stored as Eastern midnight, which this also handles."""
+    if not stamp:
+        return ""
+    return datetime.fromisoformat(stamp.replace("Z", "+00:00")).astimezone(EASTERN).date().isoformat()
 
 
 def postseason(tournament):
@@ -65,19 +75,18 @@ def normalize_event(slug, start, e):
     result = RESULTS.get(r.get("result"))
     win, lose = score(r.get("winning_score")), score(r.get("losing_score"))
     uva, opp = (win, lose) if result in ("W", "T") else (lose, win)
-    pk = None
-    if slug in PK_SPORTS and result and PK_NOTE.search(r.get("text") or ""):
-        pk, result = (result if result != "T" else None), "T"
     tournament = (e.get("tournament") or {}).get("name")
     opponent = (e.get("opponent_name") or "").strip()
 
-    date = (e.get("datetime") or "")[:10]
+    date = local_date(e.get("datetime"))
     fall_ball = SPORTS[slug]["term"] == "spring" and date[5:7] in FALL_MONTHS
 
     if e.get("is_exhibition") or EXHIBITION_NAME.search(opponent) or fall_ball:
         kind = "exhibition"
     elif INTRASQUAD.search(opponent):
         kind = "intrasquad"
+    elif OTHER_GAME.search(opponent):
+        kind = "event"
     elif result:
         kind = "official"
     elif (e.get("status") or "") == "completed" or e.get("second_opponent_name"):
@@ -97,7 +106,6 @@ def normalize_event(slug, start, e):
         "uva": uva,
         "opp": opp,
         "note": r.get("text"),
-        "pk": pk,
         "conf": bool(e.get("is_conference")),
         "tournament": tournament,
         "post": postseason(tournament),
@@ -108,13 +116,24 @@ def normalize_event(slug, start, e):
 
 
 def apply_overrides(slug, games, overrides):
-    o = overrides.get(slug, {})
-    for gid, kind in o.get("reclassify", {}).items():
-        for g in games:
-            if str(g["id"]) == gid:
-                g["kind"] = kind
-    for g in o.get("add", []):
-        games.append({"kind": "official", "added": True, **g})
+    """Per-game fixes keyed by API event id: {"kind": ..., "result": ..., "why": ...}.
+    Every override carries a "why" so the fix can be re-checked against its source."""
+    fixes = overrides.get(slug, {}).get("games", {})
+    for g in games:
+        fix = fixes.get(str(g["id"]))
+        if not fix:
+            continue
+        for key in ("kind", "result", "uva", "opp"):
+            if key in fix:
+                g[key] = fix[key]
+        g["fixed"] = fix["why"]
+    # Games the site is missing entirely, typed in from the record book.
+    for g in overrides.get(slug, {}).get("add", []):
+        games.append({
+            "id": f"add-{g['date']}-{g['opponent']}", "opponent_id": None, "location": None,
+            "note": None, "tournament": None, "post": None, "rank": None, "opp_rank": None,
+            "conf": False, "kind": "official", "fixed": g["why"], **g,
+        })
     return games
 
 
