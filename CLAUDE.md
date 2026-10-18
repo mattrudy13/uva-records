@@ -40,8 +40,9 @@ games against the book's game list by date before adding an override.
   "VCU (ex.)") or not at all (MBB vs. D-II/D-III opponents in early November).
 - Spring sports file their fall-ball games (Aug–Dec) under the spring season, and none of them count.
 - Intrasquad: "Orange-Blue World Series", "BLUE/ORANGE".
-- Soccer games decided on PKs are ties in NCAA records, even when the site shows W/L
-  (the shootout winner is kept in `pk`). Field hockey shootouts do count as W/L.
+- Soccer games decided on PKs: UVA's own books are inconsistent (some count as ties, some as
+  W/L), so a blanket rule breaks seasons. Fix them one game at a time in overrides.
+  Field hockey shootouts count as W/L.
 - The API stores UTC; convert to Eastern or evening games land on the next day.
 - Some API results are flipped (W stored as L, with scores swapped), and some games are duplicated.
 - Some 2000–2002 seasons are incomplete on the site (missing games, not just wrong ones).
