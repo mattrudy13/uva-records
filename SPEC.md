@@ -8,11 +8,12 @@ static site at mattrudy13.github.io/uva-records/. Unofficial fan project; no UVA
 | Topic | Decision |
 |---|---|
 | Unit of data | Every game: date, opponent, venue, score, W/L/T, conference flag, tournament, rankings |
-| Sports | Football, M/W basketball, baseball, softball, M/W soccer, M/W lacrosse, field hockey, volleyball, M/W tennis, wrestling |
+| Sports | Football, M/W basketball, baseball, softball, M/W soccer, M/W lacrosse, field hockey, volleyball, M/W tennis, wrestling, M/W squash (2017-18 on) |
 | Window | Academic 2000-01 to now (all the source has) |
 | Source | virginiasports.com public JSON API (`/website-api`), used for all sports, football and basketball included |
 | Edge games | Only official W-L-T games count. Exhibitions, intrasquad games and non-dual events are kept but tagged, and hidden by default |
-| Mismatches | The official record wins. `data/overrides.json` fixes games until each season matches `data/official.csv`, and the validation report lists anything that still doesn't match |
+| Mismatches | The official record wins. `data/overrides.json` fixes extra or wrong games and adds single missing ones. Seasons missing many games are flagged incomplete: the site shows the official record with a note and leaves them out of streaks |
+| Unverified | Women's lacrosse has no official year-by-year source, so it's shown with a "not checked" note |
 | Season labels | Fall sports "2005", spring sports "2006", winter sports "2005-06" |
 | Extras | Postseason tags (ACC / NCAA / bowl), head coach (hand-kept `data/coaches.csv`), rankings at game time |
 | Site | Sport page, all-sports dashboard, opponent records, streaks and highlights |
