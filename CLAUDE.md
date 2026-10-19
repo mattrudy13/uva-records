@@ -8,7 +8,7 @@ mattrudy13.github.io/uva-records/. SPEC.md has the decisions and source notes.
 Data phase done: 300 seasons match the record books, 18 are flagged incomplete, 68 are unchecked
 (women's lacrosse, squash, and seasons newer than the latest book).
 Site built and tested locally: dashboard, sport pages, opponents, highlights. Daily refresh
-workflow written. Not yet: GitHub Pages turned on, first workflow run.
+workflow written. Live on GitHub Pages since 2026-10-19; first workflow run not yet checked.
 
 ## Pipeline
 
