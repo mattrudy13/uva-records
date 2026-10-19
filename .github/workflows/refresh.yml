@@ -1,0 +1,62 @@
+name: Refresh data
+
+# Daily at 5 AM Eastern (09:00 UTC in summer, 10:00 UTC in winter; cron is UTC, so
+# this lands at 4 or 5 AM). Re-pulls the two newest seasons of every sport and
+# commits only when something changed.
+on:
+  schedule:
+    - cron: "0 9 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: refresh
+  cancel-in-progress: false
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+
+      # The pipeline uses only the standard library, so there's nothing to install.
+      - name: Pull current seasons
+        run: python scripts/scrape.py --current
+
+      - name: Normalize games
+        run: python scripts/normalize.py
+
+      # A new mismatch shouldn't stop fresh results from publishing, so this step
+      # records the outcome and the last step fails the run (which emails the owner).
+      - name: Validate against official records
+        id: validate
+        continue-on-error: true
+        run: python scripts/validate.py --quiet
+
+      - name: Build site data
+        run: python scripts/build_site.py
+
+      - name: Commit if changed
+        run: |
+          if git diff --quiet && git diff --cached --quiet; then
+            echo "No changes."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data site-data
+          git commit -m "chore(data): refresh $(date -u +%Y-%m-%d)"
+          git push
+
+      - name: Fail if validation found a mismatch
+        if: steps.validate.outcome == 'failure'
+        run: |
+          echo "::error::A season no longer matches its official record. Run scripts/validate.py locally."
+          exit 1
