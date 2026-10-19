@@ -310,7 +310,13 @@
       "2005-06",
       "2006-07",
       "2008-09"
-    ]
+    ],
+    "games": {
+      "16862": {
+        "kind": "event",
+        "why": "quad meet vs. Kent State, Howard, Old Dominion; the 1-2 is a meet record, not one dual"
+      }
+    }
   },
   "mten": {
     "incomplete": [
@@ -322,6 +328,10 @@
         "uva": 2,
         "opp": 4,
         "why": "2026 fact book: NCAA final vs. USC L 4-2"
+      },
+      "2468": {
+        "school": "Unknown opponent",
+        "why": "site lists only 'ITA Indoors' as the opponent"
       }
     },
     "add": [
@@ -413,5 +423,13 @@
         "why": "missing from site; 2026 fact book: O16 at Pennsylvania W 4-3 (fall dual)"
       }
     ]
+  },
+  "wlax": {
+    "games": {
+      "5105": {
+        "school": "Unknown opponent",
+        "why": "site lists the opponent as 'University' (NCAA game at Harrisonburg)"
+      }
+    }
   }
 }

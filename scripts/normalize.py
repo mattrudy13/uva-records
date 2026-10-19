@@ -23,7 +23,7 @@ from zoneinfo import ZoneInfo
 from sports import SPORTS, season_label
 
 ROOT = Path(__file__).resolve().parent.parent
-RAW = ROOT / "data" / "raw"
+SOURCE = ROOT / "data" / "source"
 OUT = ROOT / "data" / "games"
 OVERRIDES = ROOT / "data" / "overrides.json"
 
@@ -33,6 +33,7 @@ EXHIBITION_NAME = re.compile(r"\bexhibition\b|\(exh?\.?\)|\(ex\.\)|\(scrim", re.
 
 # Some tournament entries are another game's final, e.g. "Richmond 54, Lafayette 46".
 OTHER_GAME = re.compile(r"\D \d+, .+ \d+$")
+EVENT_NAME = re.compile(r"\b(ncaa|acc|championships?|rounds?|regional|tournament|invitational|classic|indoors)\b", re.I)
 # Spring sports play fall-ball games that UVA files under the spring season; they never count.
 FALL_MONTHS = {"08", "09", "10", "11", "12"}
 DROPPED_STATUSES = {"cancelled", "canceled", "postponed"}
@@ -77,6 +78,11 @@ def normalize_event(slug, start, e):
     uva, opp = (win, lose) if result in ("W", "T") else (lose, win)
     tournament = (e.get("tournament") or {}).get("name")
     opponent = (e.get("opponent_name") or "").strip()
+    # Some seasons list nicknames ("Tigers", "Tribe"); the school field says which school.
+    # But the school field sometimes holds the event name, so only trust it when it doesn't.
+    school = (e.get("opponent_school_name") or "").strip()
+    if not school or EVENT_NAME.search(school):
+        school = opponent
 
     date = local_date(e.get("datetime"))
     fall_ball = SPORTS[slug]["term"] == "spring" and date[5:7] in FALL_MONTHS
@@ -99,6 +105,7 @@ def normalize_event(slug, start, e):
         "season": season_label(slug, start),
         "date": date,
         "opponent": opponent,
+        "school": school,
         "opponent_id": e.get("opponent_id"),
         "venue": "neutral" if e.get("neutral_event") else e.get("venue_type"),
         "location": e.get("location"),
@@ -123,14 +130,14 @@ def apply_overrides(slug, games, overrides):
         fix = fixes.get(str(g["id"]))
         if not fix:
             continue
-        for key in ("kind", "result", "uva", "opp"):
+        for key in ("kind", "result", "uva", "opp", "school"):
             if key in fix:
                 g[key] = fix[key]
         g["fixed"] = fix["why"]
     # Games the site is missing entirely, typed in from the record book.
     for g in overrides.get(slug, {}).get("add", []):
         games.append({
-            "id": f"add-{g['date']}-{g['opponent']}", "opponent_id": None, "location": None,
+            "id": f"add-{g['date']}-{g['opponent']}", "school": g["opponent"], "opponent_id": None, "location": None,
             "note": None, "tournament": None, "post": None, "rank": None, "opp_rank": None,
             "conf": False, "kind": "official", "fixed": g["why"], **g,
         })
@@ -142,7 +149,7 @@ def main():
     OUT.mkdir(parents=True, exist_ok=True)
     for slug in SPORTS:
         games = []
-        for path in sorted((RAW / slug).glob("*.json")):
+        for path in sorted((SOURCE / slug).glob("*.json")):
             start = int(path.stem)
             for e in json.loads(path.read_text())["events"]:
                 g = normalize_event(slug, start, e)

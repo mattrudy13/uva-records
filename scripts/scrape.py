@@ -1,11 +1,13 @@
 """Pull UVA schedules and results from virginiasports.com's public JSON API.
 
-Raw responses are cached in data/raw/ (gitignored) so the normalizer can be
-re-run without hitting the site again. Use --refresh to re-download, and
---current to re-download only the newest season of each sport (the daily job).
+Responses are trimmed to the fields the normalizer reads and saved in
+data/source/ (committed), so the normalizer never needs the network. Use
+--refresh to re-download everything, and --current to re-download only the two
+newest seasons of each sport (the daily job): the newest is often next year's
+posted schedule while the one before it is still being played.
 
 Usage:
-    .venv/bin/python scripts/scrape.py              # fill cache, then normalize
+    .venv/bin/python scripts/scrape.py              # download any seasons not saved yet
     .venv/bin/python scripts/scrape.py --current    # daily refresh
     .venv/bin/python scripts/scrape.py --sport baseball --refresh
 """
@@ -22,7 +24,7 @@ from sports import FIRST_SEASON, SPORTS
 
 API = "https://virginiasports.com/website-api"
 ROOT = Path(__file__).resolve().parent.parent
-RAW = ROOT / "data" / "raw"
+SOURCE = ROOT / "data" / "source"
 USER_AGENT = "uva-records/0.1 (fan project; github.com/mattrudy13/uva-records)"
 # Be polite: the site is fine with crawlers, but there's no reason to hurry.
 DELAY_SECONDS = 0.5
@@ -68,18 +70,31 @@ def schedule_index():
     return index
 
 
+KEEP = ("id", "opponent_name", "opponent_school_name", "opponent_id", "datetime", "status", "venue_type",
+        "neutral_event", "location", "is_conference", "is_exhibition", "ranking", "opponent_ranking",
+        "second_opponent_name", "schedule_event_result", "tournament")
+
+
+def trim(e):
+    out = {k: e.get(k) for k in KEEP}
+    r = out["schedule_event_result"]
+    out["schedule_event_result"] = r and {k: r.get(k) for k in ("result", "winning_score", "losing_score", "text")}
+    out["tournament"] = out["tournament"] and {"name": out["tournament"].get("name")}
+    return out
+
+
 def fetch_events(schedule_id):
-    return get_all("schedule-events", {
+    return [trim(e) for e in get_all("schedule-events", {
         "filter[schedule_id]": schedule_id,
         "include": "scheduleEventResult,tournament",
-    })
+    })]
 
 
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--sport", action="append", help="limit to these sport slugs")
     ap.add_argument("--refresh", action="store_true", help="re-download even if cached")
-    ap.add_argument("--current", action="store_true", help="re-download only each sport's newest season")
+    ap.add_argument("--current", action="store_true", help="re-download only the two newest seasons of each sport")
     args = ap.parse_args()
 
     index = schedule_index()
@@ -90,15 +105,15 @@ def main():
     for (slug, start), sched_id in sorted(index.items()):
         if args.sport and slug not in args.sport:
             continue
-        out = RAW / slug / f"{start}.json"
-        stale = args.refresh or (args.current and start == newest[slug])
-        if out.exists() and not stale:
+        out = SOURCE / slug / f"{start}.json"
+        recent = start >= newest[slug] - 1
+        if args.current and not recent:
             continue
-        if args.current and start != newest[slug]:
+        if out.exists() and not (args.refresh or args.current):
             continue
         events = fetch_events(sched_id)
         out.parent.mkdir(parents=True, exist_ok=True)
-        out.write_text(json.dumps({"schedule_id": sched_id, "events": events}))
+        out.write_text(json.dumps({"schedule_id": sched_id, "events": events}, separators=(",", ":"), sort_keys=True))
         print(f"{slug} {start}: {len(events)} events")
 
 
