@@ -1,0 +1,198 @@
+/* Shared styles for every page. UVA navy and orange on a light layout, with a
+   dark theme chosen from the system setting. */
+
+:root {
+  color-scheme: light dark;
+  --bg: #f4f5f8;
+  --surface: #ffffff;
+  --surface-2: #f7f8fa;
+  --fg: #141a2b;
+  --muted: #5c6477;
+  --faint: #8a91a1;
+  --border: #e1e4ea;
+  --grid: #eceef2;
+  --shadow: 0 1px 2px rgba(20, 26, 43, .05), 0 6px 18px rgba(20, 26, 43, .06);
+  --navy: #232d4b;
+  --orange: #e57200;
+  --chart: #e57200;        /* validated: OKLCH L in band, >= 3:1 on the surface */
+  --link: #1d4f9e;
+  --win: #1d7a48;
+  --loss: #b42318;
+  --tie: #6b7280;
+  --display: "Barlow Condensed", "Arial Narrow", "Helvetica Neue", sans-serif;
+  --body: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --radius: 12px;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #0d111c;
+    --surface: #161b29;
+    --surface-2: #1b2132;
+    --fg: #e8ebf2;
+    --muted: #a0a8b9;
+    --faint: #737b8d;
+    --border: #2a3144;
+    --grid: #232a3b;
+    --shadow: 0 1px 2px rgba(0, 0, 0, .4), 0 8px 22px rgba(0, 0, 0, .35);
+    --chart: #e06e00;      /* re-stepped for the dark surface, validated separately */
+    --link: #f5a04a;
+    --win: #4cc38a;
+    --loss: #ff7a6b;
+    --tie: #9aa1ae;
+  }
+}
+
+* { box-sizing: border-box; }
+[hidden] { display: none !important; }
+html { -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--fg);
+  font-family: var(--body);
+  font-size: 15px;
+  line-height: 1.45;
+}
+a { color: var(--link); text-underline-offset: 2px; }
+.wrap { max-width: 1040px; margin: 0 auto; padding: 0 16px; }
+.num { font-variant-numeric: tabular-nums; }
+.muted { color: var(--muted); }
+
+/* ---- Top bar ---- */
+.topbar { background: var(--navy); border-bottom: 4px solid var(--orange); }
+.topbar .wrap { display: flex; align-items: center; justify-content: space-between; gap: 1rem; min-height: 58px; flex-wrap: wrap; }
+.wordmark {
+  font-family: var(--display);
+  font-weight: 800;
+  font-size: 1.55rem;
+  letter-spacing: .04em;
+  text-transform: uppercase;
+  color: #fff;
+  text-decoration: none;
+}
+.wordmark span { color: var(--orange); }
+.tabs { display: flex; gap: .15rem; flex-wrap: wrap; }
+.tabs a {
+  font-family: var(--display);
+  font-weight: 700;
+  font-size: 1.05rem;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  color: #c3c9d6;
+  text-decoration: none;
+  padding: .3rem .6rem;
+  border-radius: 8px;
+}
+.tabs a:hover { color: #fff; background: rgba(255, 255, 255, .08); }
+.tabs a[aria-current="page"] { color: #fff; box-shadow: inset 0 -2px 0 var(--orange); border-radius: 0; }
+
+/* ---- Page header ---- */
+.page-head { display: flex; align-items: flex-end; justify-content: space-between; gap: 1rem; flex-wrap: wrap; margin: 1.6rem 0 1rem; }
+h1, h2, h3 { font-family: var(--display); letter-spacing: .02em; margin: 0; }
+h1 { font-size: 2.2rem; font-weight: 800; line-height: 1.05; }
+h2 { font-size: 1.45rem; font-weight: 700; }
+h3 { font-size: 1.15rem; font-weight: 700; }
+.sub { color: var(--muted); margin: .25rem 0 0; }
+.controls { display: flex; gap: .6rem; align-items: center; flex-wrap: wrap; }
+select, input[type="search"] {
+  font: inherit;
+  color: var(--fg);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: .45rem .6rem;
+  min-height: 38px;
+}
+input[type="search"] { width: min(100%, 320px); }
+label.check { display: inline-flex; gap: .4rem; align-items: center; color: var(--muted); font-size: .9rem; }
+
+/* ---- Cards ---- */
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 1rem 1.1rem;
+}
+.section { margin: 1.4rem 0; }
+.section > h2 { margin-bottom: .6rem; }
+
+.total {
+  display: flex; gap: 1.5rem; align-items: baseline; flex-wrap: wrap;
+  padding: .9rem 1.1rem; margin-bottom: 1rem;
+}
+.total .big { font-family: var(--display); font-size: 2rem; font-weight: 800; }
+
+/* ---- Dashboard sport cards ---- */
+.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: .8rem; }
+.sport-card { display: flex; flex-direction: column; gap: .3rem; text-decoration: none; color: inherit; border-top: 3px solid var(--navy); }
+.sport-card:hover { border-color: var(--orange); }
+.sport-card .name { font-family: var(--display); font-weight: 700; font-size: 1.15rem; letter-spacing: .03em; text-transform: uppercase; }
+.sport-card .rec { font-family: var(--display); font-weight: 800; font-size: 1.9rem; line-height: 1; }
+.sport-card .meta { color: var(--muted); font-size: .85rem; }
+.sport-card .state { font-size: .8rem; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: .05em; }
+.sport-card .state.live { color: var(--orange); }
+.sport-card.waiting .rec, .sport-card.waiting .spark { opacity: .45; }
+.spark { display: block; margin-top: auto; padding-top: .4rem; }
+.spark rect { fill: var(--chart); }
+.spark rect.dim { fill: var(--faint); opacity: .45; }
+
+/* ---- Rivalry panel ---- */
+.rival { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: .4rem .9rem; margin-top: .6rem; }
+.rival div { display: flex; justify-content: space-between; gap: .5rem; border-bottom: 1px solid var(--grid); padding: .25rem 0; font-size: .92rem; }
+
+/* ---- Tables ---- */
+.table-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+table { width: 100%; border-collapse: collapse; font-size: .92rem; }
+th, td { text-align: left; padding: .45rem .55rem; border-bottom: 1px solid var(--grid); white-space: nowrap; }
+th { font-size: .75rem; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); font-weight: 600; }
+td.wrap-ok { white-space: normal; min-width: 10rem; }
+tr.season-row { cursor: pointer; }
+tr.season-row:hover td { background: var(--surface-2); }
+tr.season-row td:first-child::before { content: "\25B8"; display: inline-block; width: 1rem; color: var(--faint); }
+tr.season-row.open td:first-child::before { content: "\25BE"; color: var(--orange); }
+tr.season-row:focus-visible { outline: 2px solid var(--orange); outline-offset: -2px; }
+tr.games-row > td { padding: 0 0 .8rem 1rem; background: var(--surface-2); white-space: normal; }
+tr.games-row table { font-size: .87rem; }
+tr.hl td { background: rgba(229, 114, 0, .09); }
+.res { font-weight: 700; display: inline-block; min-width: 1.1rem; }
+.res.W { color: var(--win); }
+.res.L { color: var(--loss); }
+.res.T { color: var(--tie); }
+.tag { display: inline-block; font-size: .72rem; font-weight: 600; padding: .05rem .4rem; border-radius: 999px; background: var(--surface-2); border: 1px solid var(--border); color: var(--muted); margin-left: .3rem; }
+.tag.post { color: var(--orange); border-color: rgba(229, 114, 0, .45); }
+.exh td { color: var(--faint); }
+.mark { color: var(--orange); font-weight: 700; margin-left: .15rem; }
+.footnotes { color: var(--muted); font-size: .85rem; margin: .6rem 0 0; }
+.footnotes p { margin: .2rem 0; }
+.note-box { border-left: 3px solid var(--orange); padding: .5rem .8rem; background: var(--surface); color: var(--muted); font-size: .9rem; margin: .8rem 0; border-radius: 0 8px 8px 0; }
+
+/* ---- Charts ---- */
+.chart { width: 100%; height: auto; display: block; }
+.chart .grid line { stroke: var(--grid); stroke-width: 1; }
+.chart .axis text { fill: var(--muted); font-size: 11px; font-family: var(--body); }
+.chart .bar { fill: var(--chart); cursor: pointer; }
+.chart .bar.part { fill: var(--faint); }
+.chart a:focus-visible .bar, .chart .bar:hover { fill: var(--navy); }
+@media (prefers-color-scheme: dark) { .chart a:focus-visible .bar, .chart .bar:hover { fill: var(--link); } }
+.chart .half { stroke: var(--faint); stroke-width: 1; }
+
+/* ---- Highlights ---- */
+.hl-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: .8rem; }
+.hl-grid ol { margin: .4rem 0 0; padding-left: 1.3rem; }
+.hl-grid li { margin: .2rem 0; }
+
+/* ---- Footer ---- */
+footer { color: var(--muted); font-size: .82rem; padding: 2rem 0 2.5rem; }
+footer .wrap { border-top: 1px solid var(--border); padding-top: 1rem; }
+
+.skeleton { color: var(--faint); padding: 2rem 0; }
+.error { color: var(--loss); }
+
+@media (max-width: 560px) {
+  h1 { font-size: 1.8rem; }
+  .sport-card .rec { font-size: 1.6rem; }
+  th, td { padding: .4rem .4rem; }
+  .hide-sm { display: none; }
+}

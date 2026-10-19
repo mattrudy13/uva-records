@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>UVA Records: Highlights</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700;800&family=Inter:wght@400;500;600;700&display=swap">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header class="topbar" id="topbar"></header>
+
+<main class="wrap">
+  <div class="page-head">
+    <div>
+      <h1 id="title">Streaks &amp; Highlights</h1>
+      <p class="sub">Win streaks, best and worst seasons, ranked wins and biggest margins since 2000-01.</p>
+    </div>
+    <div class="controls">
+      <label for="sport" class="muted">Sport</label>
+      <select id="sport"><option value="">All sports</option></select>
+    </div>
+  </div>
+  <div id="content"><p class="skeleton">Loading&hellip;</p></div>
+</main>
+
+<footer id="footer"></footer>
+
+<script src="common.js"></script>
+<script>
+renderChrome("highlights.html");
+renderFooter();
+
+async function init() {
+  const content = document.getElementById("content");
+  try {
+    const [meta, hl] = await Promise.all([loadMeta(), loadJSON("highlights.json")]);
+    const sel = document.getElementById("sport");
+    meta.sports.forEach(s => sel.add(new Option(s.name, s.slug)));
+    sel.value = meta.bySlug[params().get("s")] ? params().get("s") : "";
+    const draw = () => {
+      history.replaceState(null, "", sel.value ? `?s=${sel.value}` : "highlights.html");
+      if (sel.value) renderSport(meta, hl[sel.value], sel.value);
+      else renderAll(meta, hl);
+    };
+    sel.addEventListener("change", draw);
+    draw();
+  } catch (err) {
+    showError(content, err);
+  }
+}
+
+function streakText(s) {
+  if (!s) return "";
+  const span = s.seasons.length > 1 ? `${s.seasons[0]} to ${s.seasons[s.seasons.length - 1]}` : s.seasons[0];
+  return `<strong class="num">${s.n}</strong> <span class="muted">(${esc(span)})</span>`;
+}
+
+function seasonText(s) {
+  return s ? `<strong>${esc(s.season)}</strong> <span class="num">${fmtRec(s.record)}</span>` : "";
+}
+
+function currentText(c) {
+  return c ? `<span class="res ${c[0]}">${c[0]}</span><span class="num">${c[1]}</span>` : "";
+}
+
+const RANK_NOTE = (meta) => `Rankings are in UVA's data only from ${academicLabel(meta.ranked_since)} on, so ranked wins start there.`;
+
+function renderAll(meta, hl) {
+  const rows = meta.sports.map(s => {
+    const h = hl[s.slug];
+    return `<tr>
+      <td><a href="?s=${s.slug}">${esc(s.name)}</a></td>
+      <td>${streakText(h.streaks[0])}</td>
+      <td class="num">${currentText(h.current)}</td>
+      <td>${seasonText(h.best[0])}</td>
+      <td class="hide-sm">${seasonText(h.worst[0])}</td>
+      <td class="num">${h.ranked_wins}</td></tr>`;
+  }).join("");
+  document.getElementById("content").innerHTML = `
+    <section class="card"><div class="table-wrap"><table>
+      <thead><tr><th>Sport</th><th>Longest win streak</th><th>Current</th><th>Best season</th><th class="hide-sm">Worst season</th><th>Ranked wins*</th></tr></thead>
+      <tbody>${rows}</tbody></table></div>
+      <div class="footnotes">
+        <p>Streaks count official games in date order and carry across seasons. A season with missing games breaks a streak, since the games that aren't listed are unknown.</p>
+        <p>Best and worst seasons are by win %, among finished seasons with at least five games.</p>
+        <p>* ${RANK_NOTE(meta)}</p>
+      </div></section>`;
+}
+
+function gameList(list, fmt) {
+  if (!list.length) return '<p class="muted">None yet.</p>';
+  return `<ol>${list.map(g => `<li>${fmt(g)}</li>`).join("")}</ol>`;
+}
+
+function gameLine(g) {
+  const rank = g.ork ? `#${esc(String(g.ork).replace("#", ""))} ` : "";
+  return `<span class="res ${g.r}">${g.r}</span> <span class="num">${g.u}-${g.p}</span> ${venueWord(g.v)} ${rank}<a href="opponents.html?o=${encodeURIComponent(g.os)}">${esc(g.o)}</a> <span class="muted">${fmtDate(g.d)}</span>`;
+}
+
+function renderSport(meta, h, slug) {
+  const sport = meta.bySlug[slug];
+  const seasonLine = s => `<a href="sport.html?s=${slug}&season=${encodeURIComponent(s.season)}">${esc(s.season)}</a> <span class="num">${fmtRec(s.record)}</span> <span class="muted">(${fmtPct(s.pct)})</span>`;
+  const streakLine = s => `<strong class="num">${s.n}</strong> wins <span class="muted">${fmtDate(s.from)} &ndash; ${fmtDate(s.to)}</span>`;
+  document.getElementById("content").innerHTML = `
+    ${UNVERIFIED[slug] ? `<p class="note-box">${esc(UNVERIFIED[slug])}</p>` : ""}
+    <div class="hl-grid">
+      <section class="card"><h3>Longest win streaks</h3>${h.streaks.length ? `<ol>${h.streaks.map(s => `<li>${streakLine(s)}</li>`).join("")}</ol>` : '<p class="muted">None.</p>'}
+        <p class="footnotes">Current streak: ${currentText(h.current) || "none"}</p></section>
+      <section class="card"><h3>Best seasons</h3><ol>${h.best.map(s => `<li>${seasonLine(s)}</li>`).join("")}</ol></section>
+      <section class="card"><h3>Worst seasons</h3><ol>${h.worst.map(s => `<li>${seasonLine(s)}</li>`).join("")}</ol></section>
+      <section class="card"><h3>Ranked wins since ${academicLabel(meta.ranked_since)}</h3>
+        <p class="sub"><strong class="num">${h.ranked_wins}</strong> in all. Highest-ranked opponents beaten:</p>
+        ${gameList(h.ranked, gameLine)}
+        <p class="footnotes">${RANK_NOTE(meta)}</p></section>
+      <section class="card"><h3>Upsets</h3><p class="sub">Unranked UVA beating a top-10 team, since ${academicLabel(meta.ranked_since)}.</p>
+        ${gameList(h.upsets, gameLine)}</section>
+      <section class="card"><h3>Biggest wins</h3>${gameList(h.biggest_wins, gameLine)}</section>
+      <section class="card"><h3>Biggest losses</h3>${gameList(h.biggest_losses, gameLine)}</section>
+    </div>`;
+}
+
+init();
+</script>
+</body>
+</html>

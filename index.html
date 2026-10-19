@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>UVA Records</title>
+<meta name="description" content="Every UVA head-to-head sport's record, season by season and game by game, since 2000-01.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700;800&family=Inter:wght@400;500;600;700&display=swap">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header class="topbar" id="topbar"></header>
+
+<main class="wrap">
+  <div class="page-head">
+    <div>
+      <h1 id="title">UVA Records</h1>
+      <p class="sub" id="subtitle">Every head-to-head sport, one academic year at a time.</p>
+    </div>
+    <div class="controls">
+      <label for="year" class="muted">Season</label>
+      <select id="year"></select>
+    </div>
+  </div>
+
+  <div id="content"><p class="skeleton">Loading&hellip;</p></div>
+</main>
+
+<footer id="footer"></footer>
+
+<script src="common.js"></script>
+<script>
+renderChrome("index.html");
+renderFooter();
+
+async function init() {
+  const content = document.getElementById("content");
+  try {
+    const [meta, seasons, opponents] = await Promise.all([loadMeta(), loadJSON("seasons.json"), loadJSON("opponents.json")]);
+    const yearSel = document.getElementById("year");
+    for (let y = meta.current; y >= 2000; y--) yearSel.add(new Option(academicLabel(y), y));
+    const asked = Number(params().get("year"));
+    yearSel.value = asked >= 2000 && asked <= meta.current ? asked : meta.current;
+    yearSel.addEventListener("change", () => {
+      history.replaceState(null, "", yearSel.value == meta.current ? "index.html" : `?year=${yearSel.value}`);
+      render(meta, seasons, opponents, Number(yearSel.value));
+    });
+    render(meta, seasons, opponents, Number(yearSel.value));
+  } catch (err) {
+    showError(content, err);
+  }
+}
+
+function render(meta, seasons, opponents, year) {
+  const live = year === meta.current;
+  document.getElementById("title").textContent = `${academicLabel(year)} season`;
+  let total = { w: 0, l: 0, t: 0 }, inProgress = 0, marks = false;
+  const cards = meta.sports.map(sport => {
+    const rows = seasons[sport.slug] || [];
+    const row = rows.find(r => r.start === year);
+    const prev = rows.find(r => r.start === year - 1);
+    // No row: either no team that year, or (this year) the schedule isn't posted yet.
+    if (!row && !(live && prev)) return "";
+    const href = `sport.html?s=${sport.slug}${row ? `&season=${encodeURIComponent(row.season)}` : ""}`;
+    const started = row && (row.listed > 0 || games(row.record) > 0);
+    if (!started) {
+      // Not started yet: first game date, and last season's record, greyed out.
+      return `<a class="card sport-card waiting" href="${href}">
+        <span class="name">${esc(sport.name)}</span>
+        <span class="state">${row && row.first ? `Starts ${fmtDate(row.first, false)}` : "Schedule not posted yet"}</span>
+        <span class="rec num">${prev ? fmtRec(prev.record) : "&mdash;"}</span>
+        <span class="meta">${prev ? `Last season (${esc(prev.season)})` : "First season"}</span>
+        ${sparkline(rows, year - 1)}</a>`;
+    }
+    total = addRec(total, row.record);
+    const going = live && row.upcoming > 0;
+    if (going) inProgress++;
+    if (row.status === "incomplete") marks = true;
+    const state = going
+      ? `<span class="state live">In progress${row.next ? ` &middot; next ${fmtDate(row.next, false)}` : ""}</span>`
+      : `<span class="state">Final</span>`;
+    const post = postText(row.post);
+    return `<a class="card sport-card" href="${href}">
+      <span class="name">${esc(sport.name)}</span>
+      ${state}
+      <span class="rec num">${fmtRec(row.record)}${seasonMark(row)}</span>
+      <span class="meta">${games(row.conf) ? `${fmtRec(row.conf)} ACC` : ""}${row.coach ? ` &middot; ${esc(row.coach)}` : ""}</span>
+      ${post ? `<span class="meta">${esc(post)}</span>` : ""}
+      ${sparkline(rows, year)}</a>`;
+  }).join("");
+
+  const vt = opponents.find(o => o.slug === meta.rival_slug);
+  const vtYear = (vt && vt.by_year && vt.by_year[year]) || {};
+  let vtTotal = { w: 0, l: 0, t: 0 };
+  const vtRows = Object.entries(vtYear).map(([slug, r]) => {
+    vtTotal = addRec(vtTotal, r);
+    return `<div><span>${esc(meta.bySlug[slug].name)}</span><span class="num">${fmtRec(r)}</span></div>`;
+  }).join("");
+
+  document.getElementById("content").innerHTML = `
+    <div class="card total">
+      <div><div class="muted">All sports${inProgress ? " so far" : ""}</div><div class="big num">${fmtRec(total)}</div></div>
+      <div><div class="muted">Win %</div><div class="big num">${fmtPct(pctOf(total))}</div></div>
+      ${inProgress ? `<div class="muted">${inProgress} sport${inProgress > 1 ? "s" : ""} in progress</div>` : ""}
+    </div>
+    <div class="grid">${cards}</div>
+    ${marks ? `<div class="footnotes"><p>&dagger; UVA's site is missing games for this season. The record shown is official; the game list is partial.</p></div>` : ""}
+    <section class="section card">
+      <h2>UVA vs. Virginia Tech</h2>
+      <p class="sub">${vtRows ? `${academicLabel(year)}: <strong class="num">${fmtRec(vtTotal)}</strong> across ${Object.keys(vtYear).length} sport${Object.keys(vtYear).length > 1 ? "s" : ""}` : `No games against Virginia Tech yet in ${academicLabel(year)}.`}
+        &middot; All-time since 2000: <strong class="num">${fmtRec(vt.record)}</strong>
+        &middot; <a href="opponents.html?o=${meta.rival_slug}">Full series</a></p>
+      ${vtRows ? `<div class="rival">${vtRows}</div>` : ""}
+    </section>`;
+}
+
+init();
+</script>
+</body>
+</html>

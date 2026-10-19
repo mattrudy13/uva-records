@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>UVA Records: Opponents</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700;800&family=Inter:wght@400;500;600;700&display=swap">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header class="topbar" id="topbar"></header>
+
+<main class="wrap">
+  <div class="page-head">
+    <div>
+      <h1 id="title">Opponents</h1>
+      <p class="sub" id="subtitle">UVA's record against every school since 2000-01, across all sports.</p>
+    </div>
+    <div class="controls" id="controls"></div>
+  </div>
+  <div id="content"><p class="skeleton">Loading&hellip;</p></div>
+</main>
+
+<footer id="footer"></footer>
+
+<script src="common.js"></script>
+<script>
+renderChrome("opponents.html");
+renderFooter();
+
+async function init() {
+  const content = document.getElementById("content");
+  try {
+    const [meta, opponents] = await Promise.all([loadMeta(), loadJSON("opponents.json")]);
+    const slug = params().get("o");
+    const opp = slug && opponents.find(o => o.slug === slug);
+    if (opp) await renderOne(meta, opp);
+    else renderList(meta, opponents, slug);
+  } catch (err) {
+    showError(content, err);
+  }
+}
+
+// ---- The list ----
+
+function renderList(meta, opponents, missing) {
+  document.getElementById("controls").innerHTML =
+    `<label for="q" class="muted">Find a school</label><input type="search" id="q" placeholder="e.g. Virginia Tech" autocomplete="off">`;
+  const content = document.getElementById("content");
+  const draw = q => {
+    const key = q.trim().toLowerCase();
+    const list = opponents.filter(o => !key || o.name.toLowerCase().includes(key));
+    content.innerHTML = `
+      ${missing ? `<p class="note-box">No opponent matches &ldquo;${esc(missing)}&rdquo;.</p>` : ""}
+      <section class="card"><div class="table-wrap"><table>
+        <thead><tr><th>School</th><th>Games</th><th>Record</th><th class="hide-sm">Pct</th><th class="hide-sm">Sports</th><th>Last met</th></tr></thead>
+        <tbody>${list.map(o => `<tr>
+          <td><a href="?o=${encodeURIComponent(o.slug)}">${esc(o.name)}</a></td>
+          <td class="num">${games(o.record)}</td>
+          <td class="num">${fmtRec(o.record)}</td>
+          <td class="num hide-sm">${fmtPct(pctOf(o.record))}</td>
+          <td class="num hide-sm">${Object.keys(o.sports).length}</td>
+          <td class="num">${fmtDate(o.last)}</td></tr>`).join("")}</tbody>
+      </table></div>
+      ${list.length ? "" : '<p class="muted">No schools match.</p>'}</section>`;
+  };
+  const q = document.getElementById("q");
+  q.addEventListener("input", () => draw(q.value));
+  draw("");
+}
+
+// ---- One school ----
+
+async function renderOne(meta, opp) {
+  document.title = `UVA Records: vs. ${opp.name}`;
+  document.getElementById("title").textContent = `UVA vs. ${opp.name}`;
+  document.getElementById("subtitle").innerHTML =
+    `<span class="num">${fmtRec(opp.record)}</span> (${fmtPct(pctOf(opp.record))}) in ${games(opp.record)} games since ${fmtDate(opp.first)} &middot; <a href="opponents.html">All opponents</a>`;
+  const sportSlugs = meta.sports.map(s => s.slug).filter(s => opp.sports[s]);
+  document.getElementById("controls").innerHTML = `<label for="filter" class="muted">Games</label>
+    <select id="filter"><option value="">All sports</option>${sportSlugs.map(s => `<option value="${s}">${esc(meta.bySlug[s].name)}</option>`).join("")}</select>`;
+
+  const bySport = sportSlugs.map(s => {
+    const x = opp.sports[s];
+    const last = x.last;
+    return `<tr>
+      <td><a href="sport.html?s=${s}">${esc(meta.bySlug[s].name)}</a></td>
+      <td class="num">${fmtRec(x.record)}</td>
+      <td class="num hide-sm">${fmtPct(pctOf(x.record))}</td>
+      <td class="num"><span class="res ${last.r}">${last.r}</span> ${last.u ?? ""}-${last.p ?? ""} <span class="muted">${fmtDate(last.d)}</span></td>
+      <td class="num">${x.streak ? `${x.streak[0]}${x.streak[1]}` : ""}</td></tr>`;
+  }).join("");
+
+  // The games come from each sport's file; load only the sports this school played.
+  const files = await Promise.all(sportSlugs.map(s => loadJSON(`games/${s}.json`)));
+  const all = files.flatMap((list, i) => list.filter(g => g.os === opp.slug && g.k === "official").map(g => ({ ...g, sport: sportSlugs[i] })))
+    .sort((a, b) => b.d.localeCompare(a.d));
+
+  const content = document.getElementById("content");
+  content.innerHTML = `
+    <section class="card"><h2>By sport</h2><div class="table-wrap"><table>
+      <thead><tr><th>Sport</th><th>Record</th><th class="hide-sm">Pct</th><th>Last meeting</th><th>Streak</th></tr></thead>
+      <tbody>${bySport}</tbody></table></div>
+      <div class="footnotes"><p>Streak is UVA's current run in that sport against ${esc(opp.name)}, e.g. W3 = won the last three.</p></div></section>
+    <section class="section card"><h2>Games</h2><div id="games"></div>
+      <div class="footnotes"><p>&Dagger; Result corrected or added from UVA's record book.</p></div></section>`;
+  const sel = document.getElementById("filter");
+  const draw = () => {
+    const list = sel.value ? all.filter(g => g.sport === sel.value) : all;
+    document.getElementById("games").innerHTML = gamesTable(list, { withYear: true, sport: sel.value ? null : g => meta.bySlug[g.sport].name });
+  };
+  sel.addEventListener("change", draw);
+  draw();
+}
+
+init();
+</script>
+</body>
+</html>

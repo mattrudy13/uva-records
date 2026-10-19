@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>UVA Records: Sports</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700;800&family=Inter:wght@400;500;600;700&display=swap">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header class="topbar" id="topbar"></header>
+
+<main class="wrap">
+  <div class="page-head">
+    <div>
+      <h1 id="title">Sports</h1>
+      <p class="sub" id="subtitle"></p>
+    </div>
+    <div class="controls">
+      <label for="sport" class="muted">Sport</label>
+      <select id="sport"></select>
+    </div>
+  </div>
+  <div id="content"><p class="skeleton">Loading&hellip;</p></div>
+</main>
+
+<footer id="footer"></footer>
+
+<script src="common.js"></script>
+<script>
+renderChrome("sport.html");
+renderFooter();
+
+let state = { slug: null, open: new Set(), exhibitions: false };
+
+async function init() {
+  const content = document.getElementById("content");
+  try {
+    const [meta, seasons] = await Promise.all([loadMeta(), loadJSON("seasons.json")]);
+    const sel = document.getElementById("sport");
+    meta.sports.forEach(s => sel.add(new Option(s.name, s.slug)));
+    const p = params();
+    state.slug = meta.bySlug[p.get("s")] ? p.get("s") : "football";
+    sel.value = state.slug;
+    if (p.get("season")) state.open.add(p.get("season"));
+    sel.addEventListener("change", () => {
+      state = { slug: sel.value, open: new Set(), exhibitions: state.exhibitions };
+      history.replaceState(null, "", `?s=${state.slug}`);
+      render(meta, seasons);
+    });
+    await render(meta, seasons);
+    if (p.get("season")) document.getElementById(`s-${p.get("season")}`)?.scrollIntoView({ block: "center" });
+  } catch (err) {
+    showError(content, err);
+  }
+}
+
+async function render(meta, seasons) {
+  const sport = meta.bySlug[state.slug];
+  const rows = seasons[state.slug] || [];
+  const played = rows.filter(r => games(r.record) > 0);
+  const total = played.reduce((acc, r) => addRec(acc, r.record), { w: 0, l: 0, t: 0 });
+  document.title = `UVA Records: ${sport.name}`;
+  document.getElementById("title").textContent = sport.name;
+  document.getElementById("subtitle").innerHTML = played.length
+    ? `${esc(played[0].season)} to ${esc(played[played.length - 1].season)} &middot; <span class="num">${fmtRec(total)}</span> (${fmtPct(pctOf(total))})`
+    : "";
+
+  const chart = winPctChart(played, season => toggle(meta, seasons, season, true));
+  const anyIncomplete = rows.some(r => r.status === "incomplete");
+  const newestFirst = [...rows].reverse();
+  const body = newestFirst.map(r => {
+    const open = state.open.has(r.season);
+    const going = r.upcoming > 0 && r.listed > 0;
+    const rec = games(r.record) ? `${fmtRec(r.record)}${seasonMark(r)}` : '<span class="muted">Not started</span>';
+    return `<tr class="season-row${open ? " open" : ""}" id="s-${esc(r.season)}" data-season="${esc(r.season)}" tabindex="0" aria-expanded="${open}">
+        <td><strong>${esc(r.season)}</strong></td>
+        <td class="num">${rec}${going ? ' <span class="tag post">In progress</span>' : ""}</td>
+        <td class="num hide-sm">${games(r.record) ? fmtPct(r.pct) : ""}</td>
+        <td class="num">${games(r.conf) ? fmtRec(r.conf) : ""}</td>
+        <td class="hide-sm">${esc(r.coach)}</td>
+        <td class="wrap-ok">${esc(postText(r.post))}</td>
+      </tr>${open ? `<tr class="games-row"><td colspan="6" id="g-${esc(r.season)}"><p class="skeleton">Loading games&hellip;</p></td></tr>` : ""}`;
+  }).join("");
+
+  document.getElementById("content").innerHTML = `
+    ${UNVERIFIED[state.slug] ? `<p class="note-box">${esc(UNVERIFIED[state.slug])}</p>` : ""}
+    <section class="card">
+      <h2>Win % by season</h2>
+      <p class="sub">Click a column to open that season's games. Grey: season still in progress.</p>
+      ${chart.html}
+    </section>
+    <section class="section card">
+      <div class="page-head" style="margin:0 0 .5rem">
+        <h2>Seasons</h2>
+        <label class="check"><input type="checkbox" id="exh" ${state.exhibitions ? "checked" : ""}> Show exhibitions and events</label>
+      </div>
+      <div class="table-wrap"><table>
+        <thead><tr><th>Season</th><th>Record</th><th class="hide-sm">Pct</th><th>ACC</th><th class="hide-sm">Coach</th><th>Postseason</th></tr></thead>
+        <tbody>${body}</tbody></table></div>
+      <div class="footnotes">
+        ${anyIncomplete ? "<p>&dagger; UVA's site is missing games for these seasons. Records are official; game lists are partial.</p>" : ""}
+        <p>&Dagger; Result corrected or added from UVA's record book.</p>
+        <p>Records are official where UVA's record book has the season; otherwise they're counted from the game list.</p>
+      </div>
+    </section>`;
+  chart.wire(document.getElementById("content"));
+
+  document.querySelectorAll("tr.season-row").forEach(tr => {
+    const go = () => toggle(meta, seasons, tr.dataset.season);
+    tr.addEventListener("click", go);
+    tr.addEventListener("keydown", e => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); go(); } });
+  });
+  document.getElementById("exh").addEventListener("change", e => {
+    state.exhibitions = e.target.checked;
+    fillOpen();
+  });
+  await fillOpen();
+}
+
+async function fillOpen() {
+  if (!state.open.size) return;
+  const all = await loadJSON(`games/${state.slug}.json`);
+  for (const season of state.open) {
+    const cell = document.getElementById(`g-${season}`);
+    if (!cell) continue;
+    const list = all.filter(g => g.s === season && (state.exhibitions || g.k === "official" || g.k === "scheduled"));
+    cell.innerHTML = gamesTable(list, { withYear: false });
+  }
+}
+
+async function toggle(meta, seasons, season, fromChart) {
+  if (state.open.has(season) && !fromChart) state.open.delete(season);
+  else state.open.add(season);
+  history.replaceState(null, "", `?s=${state.slug}${state.open.has(season) ? `&season=${encodeURIComponent(season)}` : ""}`);
+  await render(meta, seasons);
+  if (fromChart) document.getElementById(`s-${season}`)?.scrollIntoView({ behavior: "smooth", block: "start" });
+}
+
+init();
+</script>
+</body>
+</html>
