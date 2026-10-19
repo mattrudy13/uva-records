@@ -20,6 +20,18 @@ static site at mattrudy13.github.io/uva-records/. Unofficial fan project; no UVA
 | Style | UVA navy and orange on a light layout, dark mode, an accent color per sport |
 | Refresh | Daily GitHub Action that re-pulls only in-season sports and commits only on change |
 
+## Site decisions (2026-10-19)
+
+| Topic | Decision |
+|---|---|
+| Home | All-sports dashboard. Opens on the current academic year (live): in-progress sports are marked, and sports that haven't started show their first game date plus last season's record, greyed out. Season picker back to 2000-01. Combined all-sports record |
+| VT rivalry | Dashboard panel: this year's UVA vs. VT head-to-head in every sport plus all-time totals, linking to VT's opponent page |
+| Sport page | Win % by season chart, then a season table (W-L-T, ACC, coach, postseason). A season row expands in place into its game list; `?season=` links straight to it |
+| Opponents | One page per school: all-sports record, per-sport breakdown, last meeting, streak, games. Names are cleaned by rules plus a reviewed alias file, with a report of leftovers |
+| Highlights | Win streaks (longest and current; incomplete seasons break streaks), best and worst seasons, ranked wins (labeled "since 2020-21", the only years with rankings), biggest wins and losses per sport |
+| Caveats | † next to the record, plus an always-visible footnote under the table. No tooltips |
+| Build | Same as h2h: plain HTML/CSS/JS, no build step, hand-drawn SVG charts, per-sport JSON loaded on demand |
+
 ## Source notes
 
 - `GET /website-api/schedules` lists every schedule (`"Baseball 2005-06"`, `sport_id`).

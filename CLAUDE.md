@@ -3,22 +3,21 @@
 Game-by-game results for UVA's head-to-head varsity sports since 2000-01, for a static site at
 mattrudy13.github.io/uva-records/. SPEC.md has the decisions and source notes.
 
-## Status (2026-10-18)
+## Status (2026-10-19)
 
-Phase 1 (data) done. 16 sports, 2000-01 to now. Every season with an official record either
-matches exactly (300) or is listed as known incomplete in `data/overrides.json` (18: the site is
-missing games). 68 seasons are unchecked: women's lacrosse (no official source), squash (no book),
-and seasons newer than the latest record book.
-Not started: site pages, daily GitHub Action. Repo: github.com/mattrudy13/uva-records.
+Data phase done: 300 seasons match the record books, 18 are flagged incomplete, 68 are unchecked
+(women's lacrosse, squash, and seasons newer than the latest book).
+Site built and tested locally: dashboard, sport pages, opponents, highlights. Daily refresh
+workflow written. Not yet: GitHub Pages turned on, first workflow run.
 
 ## Pipeline
 
 All scripts use only the standard library, except build_official.py, which needs pypdf from
 requirements-dev.txt. Always run them with `.venv/bin/python`.
 
-1. `scripts/scrape.py`: pulls virginiasports.com's JSON API into `data/raw/` (gitignored cache).
-   `--current` re-pulls only each sport's newest season.
-2. `scripts/normalize.py`: raw → `data/games/<sport>.json`. Tags each event `official`,
+1. `scripts/scrape.py`: pulls virginiasports.com's JSON API, trimmed to the fields we use, into
+   `data/source/` (committed). `--current` re-pulls the two newest seasons of each sport.
+2. `scripts/normalize.py`: `data/source/` → `data/games/<sport>.json`. Tags each event `official`,
    `exhibition`, `intrasquad`, `event` or `scheduled`; only `official` counts. Then applies
    `data/overrides.json`.
 3. `scripts/build_official.py`: official season records from UVA record-book PDFs (and Wikipedia
@@ -26,6 +25,23 @@ requirements-dev.txt. Always run them with `.venv/bin/python`.
 4. `scripts/validate.py`: games vs official → `data/validation.json`. Exits 1 on any mismatch.
 5. `scripts/build_coaches.py`: `data/coaches.csv` (coach ranges). Record books first (typed into
    the script), rosters only for seasons after the latest book.
+6. `scripts/build_site.py`: `site-data/` for the pages (seasons, slim per-sport games, opponents,
+   highlights). Opponent names are cleaned by `scripts/opponents.py` (rules plus
+   `data/aliases.json`); run `scripts/opponents.py` to list names that may still need an alias.
+
+`data/raw/books/` (gitignored) caches the record-book PDFs for build_official.py.
+`.github/workflows/refresh.yml` runs steps 1, 2, 4 and 6 daily and commits on change; a
+validation mismatch still publishes, then fails the run so it gets noticed.
+
+## Site
+
+Static pages at the repo root, same pattern as h2h: `index.html` (dashboard), `sport.html`,
+`opponents.html`, `highlights.html`, shared `common.js` and `style.css`. No build step. Test locally
+with `.venv/bin/python -m http.server` and open http://localhost:8000.
+- No hover tooltips (Rudy's preference): the win % chart's values are in the table under it, and
+  clicking a column opens that season.
+- Chart orange is validated per theme (#e57200 light, #e06e00 dark).
+- † = incomplete season (official record, partial games); ‡ = game corrected or added from a book.
 
 ## Overrides
 
