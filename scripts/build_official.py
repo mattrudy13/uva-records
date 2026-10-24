@@ -31,7 +31,7 @@ BOOKS = {
     "football": ("https://static.virginiasports.com/custompages/sports/m-footbl/factbook/2026/2026_Virginia_Football_Record_Book_web.pdf", range(86, 89), "line"),
     "wbball": ("https://static.virginiasports.com/pdfs/w-bball/2025-26/2026-WBBFactBook.pdf", range(44, 48), "line"),
     "baseball": ("https://static.virginiasports.com/custompages/sports/m-basebl/history/BaseballRecordBook.pdf", [19], "line"),
-    "fhockey": ("http://static.virginiasports.com/custompages/sports/w-fieldh/stats/2025/fhfactbook.pdf", [24], "line"),
+    "fhockey": ("https://static.virginiasports.com/custompages/sports/w-fieldh/stats/2025/fhfactbook.pdf", [24], "line"),
     "mten": ("https://static.virginiasports.com/pdfs/tennis/2026/men/2026MTENFactbook.pdf", [42], "line"),
     "wten": ("https://static.virginiasports.com/pdfs/tennis/History/WTEN/2026WTENFactBook.pdf", [18], "line"),
     "msoc": ("https://static.virginiasports.com/pdfs/msoc/history/2026_MSOC_RecordBook.pdf", [19], "line"),
