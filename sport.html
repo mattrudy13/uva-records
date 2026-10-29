@@ -77,11 +77,11 @@ async function render(meta, seasons) {
     const rec = games(r.record) ? `${fmtRec(r.record)}${seasonMark(r)}` : '<span class="muted">Not started</span>';
     return `<tr class="season-row${open ? " open" : ""}" id="s-${esc(r.season)}" data-season="${esc(r.season)}" tabindex="0" aria-expanded="${open}">
         <td><strong>${esc(r.season)}</strong></td>
-        <td class="num">${rec}${going ? ' <span class="tag post">In progress</span>' : ""}</td>
+        <td class="num">${rec}${going ? ' <span class="going">In progress</span>' : ""}</td>
         <td class="num hide-sm">${games(r.record) ? fmtPct(r.pct) : ""}</td>
         <td class="num">${games(r.conf) ? fmtRec(r.conf) : ""}</td>
         <td class="hide-sm">${esc(r.coach)}</td>
-        <td class="wrap-ok">${esc(postText(r.post))}</td>
+        <td class="wrap-ok post-cell">${postCell(r.post)}</td>
       </tr>${open ? `<tr class="games-row"><td colspan="6" id="g-${esc(r.season)}"><p class="skeleton">Loading games&hellip;</p></td></tr>` : ""}`;
   }).join("");
 
@@ -118,6 +118,14 @@ async function render(meta, seasons) {
     fillOpen();
   });
   await fillOpen();
+}
+
+// One item per result so phones can stack them. Under the Postseason header,
+// "Postseason 2-1" (NIT, CBI and the like) reads as just "Other 2-1".
+function postCell(post) {
+  return Object.entries(post || {})
+    .map(([k, r]) => `<span>${esc(k === "Postseason" ? "Other" : k)} ${fmtRec(r)}</span>`)
+    .join('<span class="sep">, </span>');
 }
 
 async function fillOpen() {
