@@ -128,6 +128,20 @@ select, input[type="search"] {
   padding: .4rem .6rem;
   min-height: 40px;
 }
+/* The browser's own arrow hugs the right border, so draw a chevron with room
+   around it. Two gradients rather than an SVG so it takes the theme's color. */
+select {
+  appearance: none;
+  -webkit-appearance: none;
+  padding-right: 2.2rem;
+  background-image:
+    linear-gradient(45deg, transparent 50%, var(--head) 50%),
+    linear-gradient(135deg, var(--head) 50%, transparent 50%);
+  background-position: calc(100% - 18px) 55%, calc(100% - 12px) 55%;
+  background-size: 6px 6px;
+  background-repeat: no-repeat;
+  cursor: pointer;
+}
 input[type="search"] { width: min(100%, 320px); font-weight: 400; }
 select:focus-visible, input:focus-visible { outline: 2px solid var(--orange); outline-offset: 2px; }
 label.check { display: inline-flex; gap: .4rem; align-items: center; color: var(--muted); font-size: .9rem; }
