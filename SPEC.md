@@ -17,7 +17,7 @@ static site at mattrudy13.github.io/uva-records/. Unofficial fan project; no UVA
 | Season labels | Fall sports "2005", spring sports "2006", winter sports "2005-06" |
 | Extras | Postseason tags (ACC / NCAA / bowl), head coach (hand-kept `data/coaches.csv`), rankings at game time |
 | Site | Sport page, all-sports dashboard, opponent records, streaks and highlights |
-| Style | UVA navy and orange on a light layout, dark mode, an accent color per sport |
+| Style | UVA navy and orange on a light layout, dark mode, an accent color per sport (replaced 2026-10-28, see Redesign) |
 | Refresh | Daily GitHub Action that re-pulls only in-season sports and commits only on change |
 
 ## Site decisions (2026-10-19)
@@ -30,7 +30,20 @@ static site at mattrudy13.github.io/uva-records/. Unofficial fan project; no UVA
 | Opponents | One page per school: all-sports record, per-sport breakdown, last meeting, streak, games. Names are cleaned by rules plus a reviewed alias file, with a report of leftovers |
 | Highlights | Win streaks (longest and current; incomplete seasons break streaks), best and worst seasons, ranked wins (labeled "since 2020-21", the only years with rankings), biggest wins and losses per sport |
 | Caveats | † next to the record, plus an always-visible footnote under the table. No tooltips |
-| Build | Same as h2h: plain HTML/CSS/JS, no build step, hand-drawn SVG charts, per-sport JSON loaded on demand |
+| Build | Same as h2h: plain HTML/CSS/JS, no build step, hand-built charts (SVG sparklines, HTML win % chart since v0.2), per-sport JSON loaded on demand |
+
+## Redesign (2026-10-28, v0.2)
+
+Same features and data; new look and layout, so the site stops sharing the h2h/te-tracker template.
+
+| Topic | Decision |
+|---|---|
+| Direction | "Varsity", picked from four mockups (Colonnade, Almanac, Varsity, Record Book): the letter sweater |
+| Type | Graduate (collegiate slab) for headings and records, Archivo for everything else |
+| Look | White ground (dark theme from the system setting), square 2px navy frames, no shadows, no dark top bar. The navy-white-orange sweater stripe runs under the header and along each tile's cuff |
+| Dashboard | Totals in a framed scorebox; sport tiles grouped Fall / Winter / Spring, sized so no tile sits alone on a row; teams that haven't started show last season's record in outline; VT panel as a scoreline |
+| Win % chart | Every column carries its value (sideways on phones), with a y-axis and a dashed .500 line. Picked over a click-to-read box and bars inside the table. Built in HTML/CSS so labels keep their size on phones |
+| Dropdowns | Custom chevron with room from the border (the browser's arrow hugged the edge) |
 
 ## Source notes
 

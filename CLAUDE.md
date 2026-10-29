@@ -10,6 +10,8 @@ Data phase done: 300 seasons match the record books, 18 are flagged incomplete, 
 the 2026-27 seasons started (`site-data/sports.json` → `status`).
 Site built and tested locally: dashboard, sport pages, opponents, highlights. Daily refresh
 workflow written. Live on GitHub Pages since 2026-10-19; daily refresh tested by hand the same day.
+v0.2 (2026-10-28): "Varsity" redesign, same features (see Site below and SPEC.md → Redesign).
+Ideas for later live in ENHANCEMENTS.md.
 
 ## Pipeline
 

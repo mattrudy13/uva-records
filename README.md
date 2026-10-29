@@ -22,13 +22,16 @@ Unofficial fan project, not affiliated with UVA.
 ## Pages
 
 - **Dashboard** (`index.html`): every sport for the current academic year (or any year back to
-  2000-01), the combined record, and this year's head-to-head with Virginia Tech.
-- **Sport** (`sport.html?s=<slug>`): win % by season, then a season table (W-L-T, ACC record, coach,
+  2000-01), grouped by fall, winter and spring, with the combined record and this year's
+  head-to-head with Virginia Tech.
+- **Sport** (`sport.html?s=<slug>`): win % by season (each column labeled with its value), then a season table (W-L-T, ACC record, coach,
   postseason); each season opens into its game list.
 - **Opponents** (`opponents.html?o=<school>`): one page per school, with the all-sports record, per-sport breakdown,
   last meeting, streak and games.
 - **Highlights** (`highlights.html`): win streaks, best and worst seasons, ranked wins (since 2020-21)
   and biggest wins and losses per sport.
+
+Ideas for later are in [ENHANCEMENTS.md](ENHANCEMENTS.md).
 
 ## Data
 
