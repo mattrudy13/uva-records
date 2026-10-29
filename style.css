@@ -286,7 +286,9 @@ footer .wrap { border-top: 2px solid var(--line); padding-top: 1rem; }
   .sport-card .rec { font-size: 1.8rem; }
   .rival { grid-template-columns: 1fr; }
   .rival .score { border-right: 0; border-bottom: 2px solid var(--frame); }
-  th, td { padding: .45rem .45rem; }
+  th, td { padding: .45rem .35rem; }
+  /* Panels give their side padding to the tables inside them on narrow phones (360px). */
+  .card { padding: .85rem .7rem; }
   .hide-sm { display: none; }
   /* Keep the seasons table inside a phone screen: the in-progress label goes under the
      record, and postseason results stack one per line. */
