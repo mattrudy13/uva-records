@@ -60,6 +60,10 @@ def postseason(tournament):
         return "acc"
     if "bowl" in name:
         return "bowl"
+    # The NIT and WNIT also run November events ("NIT Season Tip-Off",
+    # "Preseason WNIT") that are regular-season games.
+    if re.search(r"preseason|tip-?off", name):
+        return None
     if re.search(r"\b(nit|wnit|cbi|cit)\b", name):
         return "other"
     return None
