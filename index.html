@@ -7,7 +7,7 @@
 <meta name="description" content="Every UVA head-to-head sport's record, season by season and game by game, since 2000-01.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700;800&family=Inter:wght@400;500;600;700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;600;700;800&family=Graduate&display=swap">
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -55,9 +55,9 @@ async function init() {
 
 function render(meta, seasons, opponents, year) {
   const live = year === meta.current;
-  document.getElementById("title").textContent = `${academicLabel(year)} season`;
+  document.getElementById("title").innerHTML = `${year}<span class="dash">&ndash;</span>${String(year + 1).slice(2)}`;
   let total = { w: 0, l: 0, t: 0 }, inProgress = 0, marks = false;
-  const cards = meta.sports.map(sport => {
+  const card = sport => {
     const rows = seasons[sport.slug] || [];
     const row = rows.find(r => r.start === year);
     const prev = rows.find(r => r.start === year - 1);
@@ -66,29 +66,38 @@ function render(meta, seasons, opponents, year) {
     const href = `sport.html?s=${sport.slug}${row ? `&season=${encodeURIComponent(row.season)}` : ""}`;
     const started = row && (row.listed > 0 || games(row.record) > 0);
     if (!started) {
-      // Not started yet: first game date, and last season's record, greyed out.
-      return `<a class="card sport-card waiting" href="${href}">
-        <span class="name">${esc(sport.name)}</span>
+      // Not started yet: first game date, and last season's record in outline.
+      return `<a class="sport-card waiting" href="${href}">
         <span class="state">${row && row.first ? `Starts ${fmtDate(row.first, false)}` : "Schedule not posted yet"}</span>
+        <span class="name">${esc(sport.name)}</span>
         <span class="rec num">${prev ? fmtRec(prev.record) : "&mdash;"}</span>
         <span class="meta">${prev ? `Last season (${esc(prev.season)})` : "First season"}</span>
-        ${sparkline(rows, year - 1)}</a>`;
+        ${sparkline(rows, year - 1)}<span class="cuff"></span></a>`;
     }
     total = addRec(total, row.record);
     const going = live && row.upcoming > 0;
     if (going) inProgress++;
     if (row.status === "incomplete") marks = true;
-    const state = going
-      ? `<span class="state live">In progress${row.next ? ` &middot; next ${fmtDate(row.next, false)}` : ""}</span>`
-      : `<span class="state">Final</span>`;
+    // The next game goes under the record, so the status line stays one line and
+    // records line up across a row.
+    const state = going ? '<span class="state live">In progress</span>' : '<span class="state">Final</span>';
     const post = postText(row.post);
-    return `<a class="card sport-card" href="${href}">
-      <span class="name">${esc(sport.name)}</span>
+    return `<a class="sport-card" href="${href}">
       ${state}
+      <span class="name">${esc(sport.name)}</span>
       <span class="rec num">${fmtRec(row.record)}${seasonMark(row)}</span>
-      <span class="meta">${games(row.conf) ? `${fmtRec(row.conf)} ACC` : ""}${row.coach ? ` &middot; ${esc(row.coach)}` : ""}</span>
+      <span class="meta">${games(row.conf) ? `${fmtRec(row.conf)} ACC` : ""}${row.coach ? `${games(row.conf) ? " &middot; " : ""}${esc(row.coach)}` : ""}</span>
       ${post ? `<span class="meta">${esc(post)}</span>` : ""}
-      ${sparkline(rows, year)}</a>`;
+      ${going && row.next ? `<span class="meta next">Next game ${fmtDate(row.next, false)}</span>` : ""}
+      ${sparkline(rows, year)}<span class="cuff"></span></a>`;
+  };
+  // Grouped by when each sport plays, in the order sports.json lists them.
+  const groups = ["fall", "winter", "spring"].map(term => {
+    const cards = meta.sports.filter(s => s.term === term).map(card).filter(Boolean);
+    // Columns that the tiles fill evenly, so no tile sits alone on a row: five
+    // across for five, three for six.
+    const cols = cards.length <= 5 ? cards.length : cards.length % 3 === 0 ? 3 : 4;
+    return cards.length ? `<h2 class="term">${term[0].toUpperCase() + term.slice(1)}</h2><div class="grid" style="--cols:${cols}">${cards.join("")}</div>` : "";
   }).join("");
 
   const vt = opponents.find(o => o.slug === meta.rival_slug);
@@ -96,23 +105,26 @@ function render(meta, seasons, opponents, year) {
   let vtTotal = { w: 0, l: 0, t: 0 };
   const vtRows = Object.entries(vtYear).map(([slug, r]) => {
     vtTotal = addRec(vtTotal, r);
-    return `<div><span>${esc(meta.bySlug[slug].name)}</span><span class="num">${fmtRec(r)}</span></div>`;
+    return `<span>${esc(meta.bySlug[slug].name)} <b class="num">${fmtRec(r)}</b></span>`;
   }).join("");
+  const nSports = Object.keys(vtYear).length;
 
   document.getElementById("content").innerHTML = `
-    <div class="card total">
-      <div><div class="muted">All sports${inProgress ? " so far" : ""}</div><div class="big num">${fmtRec(total)}</div></div>
-      <div><div class="muted">Win %</div><div class="big num">${fmtPct(pctOf(total))}</div></div>
-      ${inProgress ? `<div class="muted">${inProgress} sport${inProgress > 1 ? "s" : ""} in progress</div>` : ""}
+    <div class="scorebox num">
+      <div><b>${fmtRec(total)}</b><span>All sports${inProgress ? " so far" : ""}</span></div>
+      <div><b>${fmtPct(pctOf(total)) || "&mdash;"}</b><span>Win %</span></div>
+      ${inProgress ? `<div><b>${inProgress}</b><span>In progress</span></div>` : ""}
     </div>
-    <div class="grid">${cards}</div>
+    ${groups}
     ${marks ? `<div class="footnotes"><p>&dagger; UVA's site is missing games for this season. The record shown is official; the game list is partial.</p></div>` : ""}
-    <section class="section card">
-      <h2>UVA vs. Virginia Tech</h2>
-      <p class="sub">${vtRows ? `${academicLabel(year)}: <strong class="num">${fmtRec(vtTotal)}</strong> across ${Object.keys(vtYear).length} sport${Object.keys(vtYear).length > 1 ? "s" : ""}` : `No games against Virginia Tech yet in ${academicLabel(year)}.`}
-        &middot; All-time since 2000: <strong class="num">${fmtRec(vt.record)}</strong>
-        &middot; <a href="opponents.html?o=${meta.rival_slug}">Full series</a></p>
-      ${vtRows ? `<div class="rival">${vtRows}</div>` : ""}
+    <section class="rival">
+      <div class="score"><b class="num">${vtRows ? fmtRec(vtTotal) : "&mdash;"}</b><span>vs. Virginia Tech</span></div>
+      <div class="info">
+        <h2>Virginia Tech, ${academicLabel(year)}</h2>
+        ${vtRows ? `<div class="list">${vtRows}</div>` : `<p>No games against Virginia Tech yet in ${academicLabel(year)}.</p>`}
+        <p>${vtRows ? `${nSports} sport${nSports > 1 ? "s" : ""} &middot; ` : ""}All-time since 2000: <b class="num">${fmtRec(vt.record)}</b>
+          &middot; <a href="opponents.html?o=${meta.rival_slug}">Full series</a></p>
+      </div>
     </section>`;
 }
 

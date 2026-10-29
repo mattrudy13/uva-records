@@ -1,5 +1,5 @@
 // Shared by every page: data loading, formatting, game rows and tables, the
-// win % chart and sparklines, and the top bar and footer. Plain global
+// win % chart and sparklines, and the header and footer. Plain global
 // functions, no modules or build step (same as h2h).
 
 // ---- Small helpers ----
@@ -142,40 +142,27 @@ function gamesTable(list, opts = {}) {
 // ---- Charts ----
 
 // Win % by season as columns, one series, so no legend: the heading names it.
-// No hover tooltips: every value is in the season table right below the chart,
-// and clicking a column opens that season there.
+// Each column carries its value on top, so the chart reads without hover
+// tooltips; clicking a column opens that season in the table below. Built from
+// HTML rather than SVG so the labels keep their size on a phone.
 function winPctChart(rows, onPick) {
-  const W = 960, H = 220, padL = 36, padR = 8, padT = 10, padB = 26;
-  const plotW = W - padL - padR, plotH = H - padT - padB;
-  const band = plotW / Math.max(rows.length, 1);
-  const barW = Math.min(24, band * 0.7);
-  const y = p => padT + plotH * (1 - p);
-  const grid = [0, .25, .5, .75, 1].map(p =>
-    `<line x1="${padL}" x2="${W - padR}" y1="${y(p)}" y2="${y(p)}"></line>`).join("");
-  const yLabels = [0, .5, 1].map(p =>
-    `<text x="${padL - 6}" y="${y(p) + 4}" text-anchor="end">${p === 1 ? "100%" : p * 100 + "%"}</text>`).join("");
-  const every = Math.ceil(rows.length / 9);
-  const bars = rows.map((r, i) => {
-    if (r.pct == null) return "";
-    const x = padL + band * i + (band - barW) / 2;
-    const top = y(r.pct), h = Math.max(plotH * r.pct, 1);
-    // 4px rounded top, square at the baseline.
-    const rad = Math.min(4, h, barW / 2);
-    const path = `M${x},${top + h} V${top + rad} Q${x},${top} ${x + rad},${top} H${x + barW - rad} Q${x + barW},${top} ${x + barW},${top + rad} V${top + h} Z`;
+  const pctText = p => p === 0 ? ".000" : fmtPct(p);
+  const grid = [.25, .5, .75, 1].map(p => `<div class="gl${p === .5 ? " half" : ""}" style="bottom:${p * 100}%"></div>`).join("");
+  const yLabels = [0, .25, .5, .75, 1].map(p => `<span style="bottom:${p * 100}%">${pctText(p)}</span>`).join("");
+  const cols = rows.map(r => {
+    if (r.pct == null) return "<span></span>";
     const label = `${r.season}: ${fmtRec(r.record)}, ${fmtPct(r.pct)}${r.upcoming ? " so far" : ""}`;
-    return `<a href="#s-${esc(r.season)}" data-season="${esc(r.season)}" aria-label="${esc(label)}">
-      <path class="bar${r.upcoming ? " part" : ""}" d="${path}"></path>
-      <rect x="${padL + band * i}" y="${padT}" width="${band}" height="${plotH}" fill="transparent"></rect></a>`;
+    return `<a class="col${r.upcoming ? " part" : ""}" href="#s-${esc(r.season)}" data-season="${esc(r.season)}" aria-label="${esc(label)}">
+      <i style="height:${r.pct * 100}%"></i><b class="num" aria-hidden="true" style="bottom:calc(${r.pct * 100}% + 3px)">${pctText(r.pct)}</b></a>`;
   }).join("");
-  // Label every `every`th season, plus the newest one unless it would crowd the previous label.
-  const last = rows.length - 1;
-  const xLabels = rows.map((r, i) => (i % every === 0 && !(i !== last && last - i < every / 2 + 1 && last % every !== 0) || i === last)
-    ? `<text x="${padL + band * i + band / 2}" y="${H - 8}" text-anchor="middle">${esc(r.season)}</text>` : "").join("");
-  const html = `<svg class="chart" viewBox="0 0 ${W} ${H}" role="img" aria-label="Win percentage by season">
-    <g class="grid">${grid}</g><line class="half" x1="${padL}" x2="${W - padR}" y1="${y(.5)}" y2="${y(.5)}"></line>
-    ${bars}<g class="axis">${yLabels}${xLabels}</g></svg>`;
+  // Short season labels: '25 for 2025 and for 2025-26, the way each sport names its seasons.
+  const xLabels = rows.map(r => `<span>'${esc(r.season.slice(2, 4))}</span>`).join("");
+  const html = `<div class="chart${rows.length > 14 ? " dense" : ""}" style="--n:${Math.max(rows.length, 1)}" role="group" aria-label="Win percentage by season">
+    <div class="yax num" aria-hidden="true">${yLabels}</div>
+    <div class="plot">${grid}${cols}</div>
+    <div class="xax num" aria-hidden="true">${xLabels}</div></div>`;
   return { html, wire(root) {
-    root.querySelectorAll("a[data-season]").forEach(a => a.addEventListener("click", e => {
+    root.querySelectorAll(".chart a[data-season]").forEach(a => a.addEventListener("click", e => {
       e.preventDefault();
       onPick(a.dataset.season);
     }));
@@ -200,9 +187,11 @@ function sparkline(rows, uptoStart, n = 12) {
 function renderChrome(current) {
   const tabs = [["index.html", "Dashboard"], ["sport.html", "Sports"], ["opponents.html", "Opponents"], ["highlights.html", "Highlights"]];
   document.getElementById("topbar").innerHTML = `<div class="wrap">
-    <a class="wordmark" href="index.html"><span>UVA</span> Records</a>
+    <a class="brand" href="index.html"><span class="patch" aria-hidden="true">V</span>
+      <span class="wordmark">UVA Records<small>EVERY SPORT &middot; SINCE 2000-01</small></span></a>
     <nav class="tabs" aria-label="Main">${tabs.map(([href, label]) =>
-      `<a href="${href}"${href === current ? ' aria-current="page"' : ""}>${label}</a>`).join("")}</nav></div>`;
+      `<a href="${href}"${href === current ? ' aria-current="page"' : ""}>${label}</a>`).join("")}</nav></div>
+    <div class="stripes" aria-hidden="true"></div>`;
 }
 
 async function renderFooter() {
