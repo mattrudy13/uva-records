@@ -15,7 +15,7 @@ Unofficial fan project, not affiliated with UVA.
   18 are flagged incomplete, and 74 can't be checked yet (no book covers them). Each correction is
   logged with its source in `data/overrides.json`.
 - **Built with:** Python (standard library only), a daily GitHub Actions refresh, plain JavaScript with
-  hand-drawn SVG charts, and GitHub Pages.
+  hand-built charts (no chart library), and GitHub Pages.
 
 (Counts as of Oct 21, 2026.)
 

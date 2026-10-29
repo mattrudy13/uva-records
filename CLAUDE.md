@@ -36,12 +36,17 @@ validation mismatch still publishes, then fails the run so it gets noticed.
 
 ## Site
 
-Static pages at the repo root, same pattern as h2h: `index.html` (dashboard), `sport.html`,
-`opponents.html`, `highlights.html`, shared `common.js` and `style.css`. No build step. Test locally
-with `.venv/bin/python -m http.server` and open http://localhost:8000.
-- No hover tooltips (Rudy's preference): the win % chart's values are in the table under it, and
-  clicking a column opens that season.
-- Chart orange is validated per theme (#e57200 light, #e06e00 dark).
+Static pages at the repo root: `index.html` (dashboard), `sport.html`, `opponents.html`,
+`highlights.html`, shared `common.js` and `style.css`. No build step. Test locally with
+`.venv/bin/python -m http.server` and open http://localhost:8000.
+- Look (v0.2, 2026-10-28): "Varsity", picked by Rudy from four mockups so the site stops sharing
+  the h2h/te-tracker template. Graduate (slab numerals) + Archivo, square 2px navy frames, the
+  navy-white-orange sweater stripe under the header and on each tile's cuff, no dark top bar
+  (Rudy rejects those as too like his other sites). Don't copy another project's style.css here.
+- Dashboard tiles are grouped Fall / Winter / Spring (`term` in sports.json), with column counts
+  picked so no tile sits alone on a row.
+- No hover tooltips (Rudy's preference): the win % chart prints each season's value on its
+  column (sideways on phones), and clicking a column opens that season.
 - † = incomplete season (official record, partial games); ‡ = game corrected or added from a book.
 
 ## Overrides
