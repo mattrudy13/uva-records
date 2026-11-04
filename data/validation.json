@@ -1900,7 +1900,7 @@
   {
    "season": "2026",
    "games": {
-    "w": 8,
+    "w": 9,
     "l": 6,
     "t": 0,
     "conf_w": 3,
@@ -2847,6 +2847,19 @@
    },
    "status": "match",
    "conf_match": true
+  },
+  {
+   "season": "2026-27",
+   "games": {
+    "w": 1,
+    "l": 0,
+    "t": 0,
+    "conf_w": 0,
+    "conf_l": 0,
+    "conf_t": 0
+   },
+   "official": null,
+   "status": "unchecked"
   }
  ],
  "wbball": [
