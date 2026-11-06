@@ -1424,10 +1424,10 @@
    "games": {
     "w": 9,
     "l": 3,
-    "t": 3,
+    "t": 4,
     "conf_w": 5,
     "conf_l": 3,
-    "conf_t": 1
+    "conf_t": 2
    },
    "official": null,
    "status": "unchecked"
@@ -3324,7 +3324,7 @@
   {
    "season": "2026-27",
    "games": {
-    "w": 1,
+    "w": 2,
     "l": 0,
     "t": 0,
     "conf_w": 0,
