@@ -3773,6 +3773,19 @@
    },
    "official": null,
    "status": "unchecked"
+  },
+  {
+   "season": "2026-27",
+   "games": {
+    "w": 1,
+    "l": 0,
+    "t": 0,
+    "conf_w": 0,
+    "conf_l": 0,
+    "conf_t": 0
+   },
+   "official": null,
+   "status": "unchecked"
   }
  ],
  "msquash": [
@@ -3892,6 +3905,19 @@
    },
    "official": null,
    "status": "unchecked"
+  },
+  {
+   "season": "2026-27",
+   "games": {
+    "w": 1,
+    "l": 0,
+    "t": 0,
+    "conf_w": 0,
+    "conf_l": 0,
+    "conf_t": 0
+   },
+   "official": null,
+   "status": "unchecked"
   }
  ],
  "wsquash": [
@@ -3991,6 +4017,19 @@
    "games": {
     "w": 13,
     "l": 7,
+    "t": 0,
+    "conf_w": 0,
+    "conf_l": 0,
+    "conf_t": 0
+   },
+   "official": null,
+   "status": "unchecked"
+  },
+  {
+   "season": "2026-27",
+   "games": {
+    "w": 1,
+    "l": 0,
     "t": 0,
     "conf_w": 0,
     "conf_l": 0,
