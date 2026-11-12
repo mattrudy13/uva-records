@@ -13,6 +13,7 @@ Usage:
 """
 
 import argparse
+import gzip
 import json
 import re
 import time
@@ -36,8 +37,14 @@ def get(path, params):
     for attempt in range(3):
         try:
             with urllib.request.urlopen(req, timeout=30) as resp:
-                time.sleep(DELAY_SECONDS)
-                return json.load(resp)
+                body = resp.read()
+            time.sleep(DELAY_SECONDS)
+            # The site's CDN sometimes gzips the body even though we never ask
+            # for it (2026-11-11 run failed on this). urllib won't decompress,
+            # so sniff the gzip magic bytes rather than trusting the header.
+            if body[:2] == b"\x1f\x8b":
+                body = gzip.decompress(body)
+            return json.loads(body)
         except Exception:
             if attempt == 2:
                 raise
