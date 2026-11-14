@@ -2369,10 +2369,10 @@
    "season": "2026",
    "games": {
     "w": 6,
-    "l": 17,
+    "l": 18,
     "t": 0,
     "conf_w": 2,
-    "conf_l": 12,
+    "conf_l": 13,
     "conf_t": 0
    },
    "official": null,
@@ -2851,7 +2851,7 @@
   {
    "season": "2026-27",
    "games": {
-    "w": 4,
+    "w": 5,
     "l": 0,
     "t": 0,
     "conf_w": 0,
